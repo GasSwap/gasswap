@@ -26,16 +26,6 @@
         <span class="ml-2 text-xs text-slate-400">v1.2</span>
       </div>
 
-      <!-- Swap Menu -->
-      <nav class="flex flex-wrap gap-3 text-sm text-slate-400 font-medium">
-        <a href="#" class="text-emerald-400">BNB → TRX</a>
-        <span class="disabled-link">TRX → BNB</span>
-        <span class="disabled-link">BNB → ETH</span>
-        <span class="disabled-link">ETH → BNB</span>
-        <span class="disabled-link">BNB → POL</span>
-        <span class="disabled-link">POL → BNB</span>
-      </nav>
-
       <!-- Language flags -->
       <div class="flex items-center gap-3 text-lg">
         <span class="flag-btn" data-lang="en">🇺🇸</span>
@@ -49,15 +39,28 @@
 
   <!-- MAIN -->
   <main class="max-w-5xl mx-auto px-4 py-8">
+    <!-- Title -->
     <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6 text-center">
-      <h2 id="title" class="text-2xl font-semibold mb-2">BNB (BSC) → TRX Cross-Swap</h2>
+      <h2 id="title" class="text-2xl font-semibold mb-1">BNB (BSC) → TRX Cross-Swap</h2>
+      <h3 class="text-sm text-slate-500 tracking-wide mb-2">Cross-Chain Swap</h3>
       <p id="subtitle" class="text-slate-400 text-sm">Deposit BNB (BSC) and receive TRX automatically after confirmation.</p>
     </section>
 
+    <!-- Swap Menu -->
+    <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
+      <a href="#" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
+      <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">TRX → BNB</span>
+      <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">BNB → ETH</span>
+      <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">ETH → BNB</span>
+      <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">BNB → POL</span>
+      <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">POL → BNB</span>
+    </section>
+
+    <!-- Form + Session -->
     <section class="grid md:grid-cols-2 gap-6">
       <!-- Left: Form -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 id="formTitle" class="text-lg font-semibold mb-4">Create deposit session</h3>
+        <h3 id="formTitle" class="text-lg font-semibold mb-4">Please fill this form before sending your tokens</h3>
         <form id="swapForm" class="space-y-4" novalidate>
           <div>
             <label id="labelSender" class="block text-sm mb-1">Sender (BNB BSC)</label>
@@ -141,11 +144,12 @@
       en: {
         title:"BNB (BSC) → TRX Cross-Swap",
         subtitle:"Deposit BNB (BSC) and receive TRX automatically after confirmation.",
-        formTitle:"Create deposit session",
+        formTitle:"Please fill this form before sending your tokens",
         labelSender:"Sender (BNB BSC)",
         labelReceiver:"Receiver (TRX)",
         start:"Start Swap",
         sessionTitle:"Deposit session",
+        inactiveHint:"Fill the form and press ‘Start Swap’.",
         depositTo:"Deposit to (fixed address)",
         scanToDeposit:"Scan to deposit",
         deadlineLabel:"Deposit deadline",
@@ -156,62 +160,18 @@
       ko: {
         title:"BNB (BSC) → TRX 크로스스왑",
         subtitle:"BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.",
-        formTitle:"입금 세션 만들기",
+        formTitle:"토큰을 보내기 전에 먼저 작성하세요",
         labelSender:"보내는 지갑 (BNB BSC)",
         labelReceiver:"받는 지갑 (TRX)",
         start:"스왑 시작하기",
         sessionTitle:"입금 세션",
+        inactiveHint:"폼을 작성하고 ‘스왑 시작하기’를 눌러주세요.",
         depositTo:"입금 주소 (고정)",
         scanToDeposit:"입금용 QR 코드",
         deadlineLabel:"입금 제한시간",
         notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
         err_sender:"BNB(BSC) 주소가 올바르지 않습니다.",
         err_receiver:"TRX 주소가 올바르지 않습니다."
-      },
-      ja: {
-        title:"BNB (BSC) → TRX クロススワップ",
-        subtitle:"BNB(BSC)を入金すると、確認後にTRXが自動送付されます。",
-        formTitle:"入金セッションを作成",
-        labelSender:"送信元 (BNB BSC)",
-        labelReceiver:"受信先 (TRX)",
-        start:"スワップ開始",
-        sessionTitle:"入金セッション",
-        depositTo:"入金先アドレス (固定)",
-        scanToDeposit:"入金用QRコード",
-        deadlineLabel:"入金期限",
-        notice:"⚠️ セキュリティのため、1 USDT未満または20 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
-        err_sender:"BSCアドレスが無効です。",
-        err_receiver:"TRXアドレスが無効です。"
-      },
-      zh: {
-        title:"BNB (BSC) → TRX 跨链兑换",
-        subtitle:"入金 BNB(BSC)，确认后自动收到 TRX。",
-        formTitle:"创建入金会话",
-        labelSender:"发送地址 (BNB BSC)",
-        labelReceiver:"接收地址 (TRX)",
-        start:"开始兑换",
-        sessionTitle:"入金会话",
-        depositTo:"入金地址（固定）",
-        scanToDeposit:"扫描二维码入金",
-        deadlineLabel:"入金截止时间",
-        notice:"⚠️ 为了安全，请勿转入1 USDT以下或20 USDT以上金额。仅用于Gas的小额入金。",
-        err_sender:"无效的 BSC 地址",
-        err_receiver:"无效的 TRX 地址"
-      },
-      es: {
-        title:"BNB (BSC) → TRX Intercambio cruzado",
-        subtitle:"Deposita BNB (BSC) y recibe TRX automáticamente tras la confirmación.",
-        formTitle:"Crear sesión de depósito",
-        labelSender:"Remitente (BNB BSC)",
-        labelReceiver:"Receptor (TRX)",
-        start:"Iniciar intercambio",
-        sessionTitle:"Sesión de depósito",
-        depositTo:"Depositar en (dirección fija)",
-        scanToDeposit:"Escanear para depositar",
-        deadlineLabel:"Plazo de depósito",
-        notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 1 USDT o mayores a 20 USDT. Envía solo pequeñas cantidades con fines de gas.",
-        err_sender:"Dirección BSC inválida",
-        err_receiver:"Dirección TRX inválida"
       }
     };
 
@@ -226,18 +186,8 @@
         const j = await r.json();
         const c = (j.country_code || "").toUpperCase();
         if (c === "KR") return "ko";
-        if (c === "JP") return "ja";
-        if (["CN","TW","HK","MO"].includes(c)) return "zh";
-        if (["ES","MX","AR","CO","CL","PE"].includes(c)) return "es";
         return "en";
-      } catch {
-        const nav = navigator.language.toLowerCase();
-        if (nav.startsWith("ko")) return "ko";
-        if (nav.startsWith("ja")) return "ja";
-        if (nav.startsWith("zh")) return "zh";
-        if (nav.startsWith("es")) return "es";
-        return "en";
-      }
+      } catch { return "en"; }
     }
 
     function applyLang() {
@@ -253,12 +203,11 @@
       $("#scanToDeposit").textContent = t.scanToDeposit;
       $("#deadlineLabel").textContent = t.deadlineLabel;
       $("#noticeBox").textContent = t.notice;
+      $("#inactiveHint").textContent = t.inactiveHint;
     }
 
     function highlightFlag() {
-      document.querySelectorAll(".flag-btn").forEach(f=>{
-        f.classList.toggle("flag-active", f.dataset.lang===currentLang);
-      });
+      document.querySelectorAll(".flag-btn").forEach(f=> f.classList.toggle("flag-active", f.dataset.lang===currentLang));
     }
 
     function makeQR(text){$("#qr").innerHTML=""; new QRCode($("#qr"),{text,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});}
@@ -280,13 +229,7 @@
       applyLang();
       highlightFlag();
 
-      document.querySelectorAll(".flag-btn").forEach(f=>{
-        f.addEventListener("click",()=>{
-          currentLang = f.dataset.lang;
-          applyLang();
-          highlightFlag();
-        });
-      });
+      document.querySelectorAll(".flag-btn").forEach(f=> f.addEventListener("click",()=>{currentLang=f.dataset.lang;applyLang();highlightFlag();}));
 
       $("#swapForm").addEventListener("submit", async e=>{
         e.preventDefault();
@@ -304,4 +247,4 @@
     });
   </script>
 </body>
-</html
+</html>
