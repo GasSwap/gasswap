@@ -5,62 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GasSwap – BNB (BSC) → TRX Cross-Swap</title>
   <meta name="description" content="Deposit BNB (BSC) and receive TRX automatically. Simple cross-chain swap request UI." />
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    a { word-break: break-all; }
-  </style>
+  <style>a { word-break: break-all; }</style>
 </head>
+
 <body class="min-h-screen bg-slate-950 text-slate-100">
   <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-20">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-400"></div>
         <h1 class="text-lg font-semibold tracking-tight">GasSwap</h1>
-        <span class="ml-2 text-xs text-slate-400">v0.2 – Static UI</span>
+        <span class="ml-2 text-xs text-slate-400">v0.3 – GitHub JSON Link</span>
       </div>
-      <select id="langSelect" class="bg-slate-800 text-slate-100 text-sm rounded-xl px-3 py-2 border border-slate-700 focus:ring-2 focus:ring-emerald-400">
-        <option value="auto">🌐 Auto</option>
-        <option value="en">English</option>
-        <option value="ko">한국어</option>
-        <option value="ja">日本語</option>
-        <option value="zh">中文</option>
-        <option value="es">Español</option>
-      </select>
     </div>
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-8">
-    <section class="mb-6">
-      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h2 id="title" class="text-2xl font-semibold mb-2">BNB (BSC) → TRX Cross-Swap</h2>
-        <p id="subtitle" class="text-slate-400 text-sm leading-relaxed">
-          Deposit BNB (BSC) and receive TRX automatically after confirmation.
-        </p>
-      </div>
+    <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6">
+      <h2 class="text-2xl font-semibold mb-2">BNB (BSC) → TRX Cross-Swap</h2>
+      <p class="text-slate-400 text-sm">Deposit BNB (BSC) and receive TRX automatically after confirmation.</p>
     </section>
 
     <section class="grid md:grid-cols-2 gap-6">
       <!-- Left: Form -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 id="formTitle" class="text-lg font-semibold mb-4">Create deposit session</h3>
+        <h3 class="text-lg font-semibold mb-4">Create deposit session</h3>
         <form id="swapForm" class="space-y-4" novalidate>
           <div>
-            <label for="sender" id="labelSender" class="block text-sm text-slate-300 mb-1">Sender (BNB BSC)</label>
-            <input id="sender" name="sender" type="text"
-              class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 focus:ring-emerald-400 px-4 py-3 text-sm"
+            <label class="block text-sm mb-1">Sender (BNB BSC)</label>
+            <input id="sender" type="text"
+              class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm"
               placeholder="0x… (BNB BSC address)" required />
-            <p id="senderHelp" class="text-xs text-slate-500 mt-1">Must be a valid BNB (BSC) wallet (0x…40 hex chars).</p>
           </div>
-
           <div>
-            <label for="receiver" id="labelReceiver" class="block text-sm text-slate-300 mb-1">Receiver (TRX)</label>
-            <input id="receiver" name="receiver" type="text"
-              class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 focus:ring-emerald-400 px-4 py-3 text-sm"
+            <label class="block text-sm mb-1">Receiver (TRX)</label>
+            <input id="receiver" type="text"
+              class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm"
               placeholder="T… (TRON base58 address)" required />
-            <p id="receiverHelp" class="text-xs text-slate-500 mt-1">Should start with T and be 34 chars (base58).</p>
           </div>
 
           <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
@@ -71,24 +53,23 @@
           </button>
         </form>
 
-        <!-- Explorers for user-provided addresses -->
         <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2">
-          <div id="youCanCheck">You can verify your wallets on explorers:</div>
+          <div>You can verify your wallets on explorers:</div>
           <a id="userBscLink" target="_blank" class="block underline hover:text-emerald-300"></a>
           <a id="userTrxLink" target="_blank" class="block underline hover:text-emerald-300"></a>
         </div>
       </div>
 
-      <!-- Right: Session panel -->
+      <!-- Right: Session -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
+        <h3 class="text-lg font-semibold mb-4">Deposit session</h3>
         <div id="inactiveHint" class="text-sm text-slate-400">
           Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session.
         </div>
 
         <div id="sessionPanel" class="hidden space-y-4">
           <div>
-            <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
+            <div class="text-xs text-slate-400">Deposit to (fixed address)</div>
             <div class="mt-1 flex items-center gap-2">
               <code id="depositAddress" class="text-emerald-200 break-all"></code>
               <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
@@ -98,418 +79,125 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
-              <div class="text-[10px] text-slate-500 mt-1" id="qrHint">Scan to deposit</div>
+              <div class="text-[10px] text-slate-500 mt-1">Scan to deposit</div>
             </div>
             <div>
-              <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
+              <div class="text-xs text-slate-400">Deposit deadline</div>
               <div id="countdown" class="text-3xl font-mono mt-1">01:00:00</div>
-              <div class="text-xs text-slate-500 mt-2" id="expireNote">If the timer expires, the session may be invalidated.</div>
             </div>
-          </div>
-
-          <div class="text-sm text-slate-400">
-            <div id="serverCheck">Server wallet explorers:</div>
-            <a id="serverBscLink" target="_blank" class="block underline hover:text-emerald-300"></a>
-            <a id="serverTrxLink" target="_blank" class="block underline hover:text-emerald-300"></a>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- Persistent Footer Explorers -->
-    <section class="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-5">
-      <div id="footerTitle" class="text-sm text-slate-300 mb-2">📡 Server Wallets (always visible)</div>
-      <a id="footerBsc" target="_blank" class="block underline hover:text-emerald-300"></a>
-      <a id="footerTrx" target="_blank" class="block underline hover:text-emerald-300"></a>
-    </section>
-
-    <section class="mt-4 text-xs text-slate-500 leading-relaxed">
-      <p id="legal1">This page is a static UI prototype. No wallets are connected here. Always verify addresses and transactions on-chain.</p>
-      <p id="legal2">Language auto-detection uses public IP geolocation (client-based) with fallbacks.</p>
-    </section>
   </main>
 
   <footer class="mt-10 py-10 text-center text-xs text-slate-500">
-    © <span id="year"></span> GasSwap. All rights reserved.
+    © <span id="year"></span> GasSwap
   </footer>
 
   <script>
-    // ====== CONFIG ======
+    // === CONFIG ===
     const CONFIG = {
-      SERVER_WALLETS: {
-        BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231", // BNB (BSC) deposit address (fixed)
-        TRX: "TMq11111111111111111111111111111111"         // TRX payout wallet
-      },
-      SESSION_SECONDS: 3600,
-      FORM_ENDPOINT: "https://89.147.101.71:3000/form" // ← 여기에 실제 제출 엔드포인트 설정
+      GITHUB_USER: "GasSwap",
+      REPO: "gasswap-data",
+      FILE_PATH: "data/forms.json",
+      TOKEN: "ghp_xxxxxxxxxxxxxxxxxxxxxx", // ⚠️ 테스트용 (실서버에 노출 금지)
+      SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
+      SESSION_SECONDS: 3600
     };
 
-    // ====== I18N ======
-    const I18N = {
-      en: {
-        title: "BNB (BSC) → TRX Cross-Swap",
-        subtitle: "Deposit BNB (BSC) and receive TRX automatically after confirmation.",
-        formTitle: "Create deposit session",
-        sender: "Sender (BNB BSC)",
-        receiver: "Receiver (TRX)",
-        senderHelp: "Must be a valid BNB (BSC) wallet (0x…40 hex chars).",
-        receiverHelp: "Should start with T and be 34 chars (base58).",
-        start: "Start Swap",
-        err_sender: "Invalid BNB (BSC) address.",
-        err_receiver: "Invalid TRON address.",
-        youCanCheck: "You can verify your wallets on explorers:",
-        sessionTitle: "Deposit session",
-        inactiveHint: "Fill the form and press Start Swap to generate your session.",
-        depositTo: "Deposit to (fixed address)",
-        copy: "Copy",
-        qrHint: "Scan to deposit",
-        deadline: "Deposit deadline",
-        expireNote: "If the timer expires, the session may be invalidated.",
-        serverCheck: "Server wallet explorers:",
-        footerTitle: "📡 Server Wallets (always visible)",
-        legal1: "This page is a static UI prototype. No wallets are connected here. Always verify addresses and transactions on-chain.",
-        legal2: "Language auto-detection uses public IP geolocation.",
-        bscSenderLink: "Sender wallet on BscScan (BNB BSC)",
-        trxReceiverLink: "Receiver wallet on TRONSCAN",
-        bscServerLink: "Server wallet on BscScan (BNB BSC)",
-        trxServerLink: "Server wallet on TRONSCAN"
-      },
-      ko: {
-        title: "BNB (BSC) → TRX 크로스스왑",
-        subtitle: "BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.",
-        formTitle: "입금 세션 만들기",
-        sender: "보내는 지갑 (BNB BSC)",
-        receiver: "받는 지갑 (TRX)",
-        senderHelp: "0x로 시작하는 40자리 BNB(BSC) 주소여야 합니다.",
-        receiverHelp: "T로 시작하는 34자리(base58) 주소여야 합니다.",
-        start: "스왑 시작하기",
-        err_sender: "BNB(BSC) 주소 형식이 올바르지 않습니다.",
-        err_receiver: "TRON 주소 형식이 올바르지 않습니다.",
-        youCanCheck: "탐색기에서 직접 확인하세요:",
-        sessionTitle: "입금 세션",
-        inactiveHint: "폼 작성 후 ‘스왑 시작하기’를 누르면 세션이 생성됩니다.",
-        depositTo: "입금 주소 (고정)",
-        copy: "복사",
-        qrHint: "QR로 입금",
-        deadline: "입금 시한",
-        expireNote: "시한이 지나면 세션이 무효 처리될 수 있습니다.",
-        serverCheck: "서버 지갑 탐색기:",
-        footerTitle: "📡 서버 지갑 (항상 표시)",
-        legal1: "이 페이지는 정적 UI 시제품입니다. 지갑 연결은 없습니다. 주소와 트랜잭션은 온체인에서 확인하세요.",
-        legal2: "언어 자동 감지는 공용 IP 지오로케이션을 사용합니다.",
-        bscSenderLink: "보내는 지갑 – BscScan (BNB BSC)",
-        trxReceiverLink: "받는 지갑 – TRONSCAN",
-        bscServerLink: "서버 지갑 – BscScan (BNB BSC)",
-        trxServerLink: "서버 지갑 – TRONSCAN"
-      },
-      ja: {
-        title: "BNB (BSC) → TRX クロススワップ",
-        subtitle: "BNB(BSC)を入金すると、確認後にTRXが自動送付されます。",
-        formTitle: "入金セッションを作成",
-        sender: "送信元 (BNB BSC)",
-        receiver: "受信先 (TRX)",
-        senderHelp: "0xで始まる40桁のBNB(BSC)アドレスが必要です。",
-        receiverHelp: "Tで始まる34桁（base58）のアドレスが必要です。",
-        start: "スワップ開始",
-        err_sender: "BNB(BSC)アドレスが無効です。",
-        err_receiver: "TRONアドレスが無効です。",
-        youCanCheck: "エクスプローラーで確認できます：",
-        sessionTitle: "入金セッション",
-        inactiveHint: "フォーム入力後「スワップ開始」でセッションを生成します。",
-        depositTo: "入金先（固定アドレス）",
-        copy: "コピー",
-        qrHint: "QRで入金",
-        deadline: "入金期限",
-        expireNote: "期限切れの場合、セッションは無効になる場合があります。",
-        serverCheck: "サーバーウォレット（エクスプローラー）：",
-        footerTitle: "📡 サーバーウォレット（常時表示）",
-        legal1: "このページは静的UIの試作品です。ウォレット接続はありません。オンチェーンで必ず確認してください。",
-        legal2: "言語の自動判定は公共のIPジオロケーションを使用します。",
-        bscSenderLink: "送信元 – BscScan (BNB BSC)",
-        trxReceiverLink: "受信先 – TRONSCAN",
-        bscServerLink: "サーバー – BscScan (BNB BSC)",
-        trxServerLink: "サーバー – TRONSCAN"
-      },
-      zh: {
-        title: "BNB (BSC) → TRX 跨链兑换",
-        subtitle: "入金 BNB(BSC)，确认后将自动发送 TRX。",
-        formTitle: "创建入金会话",
-        sender: "发送地址 (BNB BSC)",
-        receiver: "接收地址 (TRX)",
-        senderHelp: "必须为 0x 开头的 40 位 BNB(BSC) 地址。",
-        receiverHelp: "必须以 T 开头，共 34 位（base58）。",
-        start: "开始兑换",
-        err_sender: "无效的 BNB(BSC) 地址。",
-        err_receiver: "无效的 TRON 地址。",
-        youCanCheck: "可在区块浏览器查看：",
-        sessionTitle: "入金会话",
-        inactiveHint: "填写表单并点击“开始兑换”以生成会话。",
-        depositTo: "入金地址（固定）",
-        copy: "复制",
-        qrHint: "扫码入金",
-        deadline: "入金截止时间",
-        expireNote: "超时后会话可能失效。",
-        serverCheck: "服务器钱包（区块浏览器）：",
-        footerTitle: "📡 服务器钱包（始终显示）",
-        legal1: "本页面为静态 UI 原型，未连接钱包。请务必在链上核对地址和交易。",
-        legal2: "语言自动检测使用公共 IP 地理定位。",
-        bscSenderLink: "发送地址 – BscScan (BNB BSC)",
-        trxReceiverLink: "接收地址 – TRONSCAN",
-        bscServerLink: "服务器钱包 – BscScan (BNB BSC)",
-        trxServerLink: "服务器钱包 – TRONSCAN"
-      },
-      es: {
-        title: "BNB (BSC) → TRX Intercambio cruzado",
-        subtitle: "Deposita BNB (BSC) y recibe TRX automáticamente tras la confirmación.",
-        formTitle: "Crear sesión de depósito",
-        sender: "Remitente (BNB BSC)",
-        receiver: "Receptor (TRX)",
-        senderHelp: "Debe ser una dirección BNB (BSC) válida (0x…40 hex).",
-        receiverHelp: "Debe comenzar con T y tener 34 caracteres (base58).",
-        start: "Iniciar intercambio",
-        err_sender: "Dirección BNB (BSC) inválida.",
-        err_receiver: "Dirección TRON inválida.",
-        youCanCheck: "Puedes verificar en los exploradores:",
-        sessionTitle: "Sesión de depósito",
-        inactiveHint: "Completa el formulario y pulsa Iniciar intercambio para generar tu sesión.",
-        depositTo: "Depositar en (dirección fija)",
-        copy: "Copiar",
-        qrHint: "Escanea para depositar",
-        deadline: "Fecha límite de depósito",
-        expireNote: "Si el temporizador expira, la sesión puede invalidarse.",
-        serverCheck: "Exploradores del wallet del servidor:",
-        footerTitle: "📡 Wallets del servidor (siempre visible)",
-        legal1: "Esta página es un prototipo UI estático. No hay conexión de wallet. Verifica en cadena siempre.",
-        legal2: "La detección de idioma usa geolocalización IP pública.",
-        bscSenderLink: "Remitente en BscScan (BNB BSC)",
-        trxReceiverLink: "Receptor en TRONSCAN",
-        bscServerLink: "Wallet del servidor en BscScan (BNB BSC)",
-        trxServerLink: "Wallet del servidor en TRONSCAN"
-      }
-    };
-
-    // ====== Helpers ======
     const $ = (s) => document.querySelector(s);
     const isEVM = (a) => /^0x[0-9a-fA-F]{40}$/.test(a || "");
     const isTRX = (a) => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
-    const bscAddrURL = (a) => `https://bscscan.com/address/${a}`;
-    const tronAddrURL = (a) => `https://tronscan.org/#/address/${a}`;
-    let currentLang = "en";
-    let countdownTimer = null;
-    let geoInfo = { country: null, source: null };
 
-    // Country → language map
-    function mapCountryToLang(cc) {
-      const c = (cc || "").toUpperCase();
-      if (c === "KR") return "ko";
-      if (c === "JP") return "ja";
-      if (["CN","TW","HK","MO"].includes(c)) return "zh";
-      if (["ES","MX","AR","CO","CL","PE","VE","UY","PY","BO","EC","GT","DO","PR"].includes(c)) return "es";
-      return "en";
+    function makeQR(text) {
+      $("#qr").innerHTML = "";
+      new QRCode($("#qr"), { text, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
     }
 
-    // Client-IP based geo detection (no server IP use)
-    async function detectLangByIpapi() {
-      try {
-        const r = await fetch("https://ipapi.co/json/");
-        const j = await r.json();
-        if (j && j.country_code) {
-          geoInfo = { country: j.country_code, source: "ipapi" };
-          return mapCountryToLang(j.country_code);
-        }
-      } catch {}
-      return null;
-    }
-
-    async function detectLangByCountryIs() {
-      try {
-        const r = await fetch("https://api.country.is/");
-        const j = await r.json();
-        if (j && j.country) {
-          geoInfo = { country: j.country, source: "country.is" };
-          return mapCountryToLang(j.country);
-        }
-      } catch {}
-      return null;
-    }
-
-    async function pickAutoLang() {
-      const saved = localStorage.getItem("gasswap_lang");
-      if (saved) return saved;
-
-      let lang = await detectLangByIpapi();
-      if (!lang) lang = await detectLangByCountryIs();
-      if (!lang) {
-        // Browser locale final fallback
-        const nav = (navigator.language || "en").toLowerCase();
-        if (nav.startsWith("ko"))      lang = "ko";
-        else if (nav.startsWith("ja")) lang = "ja";
-        else if (nav.startsWith("zh")) lang = "zh";
-        else if (nav.startsWith("es")) lang = "es";
-        else lang = "en";
-        geoInfo = { country: null, source: "navigator" };
-      }
-      return lang;
-    }
-
-    function setText(id, key) { const el = $(id); if (el) el.textContent = I18N[currentLang][key]; }
-
-    function applyI18n() {
-      setText("#title","title");
-      setText("#subtitle","subtitle");
-      setText("#formTitle","formTitle");
-      setText("#labelSender","sender");
-      setText("#labelReceiver","receiver");
-      setText("#senderHelp","senderHelp");
-      setText("#receiverHelp","receiverHelp");
-      setText("#sessionTitle","sessionTitle");
-      setText("#inactiveHint","inactiveHint");
-      setText("#depositTo","depositTo");
-      setText("#qrHint","qrHint");
-      setText("#deadlineLabel","deadline");
-      setText("#expireNote","expireNote");
-      setText("#footerTitle","footerTitle");
-      setText("#legal1","legal1");
-      setText("#legal2","legal2");
-      $("#startBtn").textContent = I18N[currentLang].start;
-      $("#copyDeposit").textContent = I18N[currentLang].copy;
-
-      // Links text
-      $("#footerBsc").textContent   = I18N[currentLang].bscServerLink;
-      $("#footerTrx").textContent   = I18N[currentLang].trxServerLink;
-      $("#serverBscLink").textContent = I18N[currentLang].bscServerLink;
-      $("#serverTrxLink").textContent = I18N[currentLang].trxServerLink;
-
-      if (!$("#userExplorers").classList.contains("hidden")) {
-        $("#userBscLink").textContent = I18N[currentLang].bscSenderLink;
-        $("#userTrxLink").textContent = I18N[currentLang].trxReceiverLink;
-      }
+    function showSession() {
+      $("#inactiveHint").classList.add("hidden");
+      $("#sessionPanel").classList.remove("hidden");
+      $("#depositAddress").textContent = CONFIG.SERVER_BSC;
+      makeQR(CONFIG.SERVER_BSC);
+      startCountdown(CONFIG.SESSION_SECONDS);
     }
 
     function startCountdown(seconds) {
       const el = $("#countdown");
-      clearInterval(countdownTimer);
       const end = Date.now() + seconds * 1000;
-      const fmt = (n) => String(n).padStart(2,"0");
-      function tick() {
-        const rem = Math.max(0, Math.floor((end - Date.now())/1000));
-        const h = fmt(Math.floor(rem/3600)), m = fmt(Math.floor((rem%3600)/60)), s = fmt(rem%60);
+      const tick = () => {
+        const rem = Math.max(0, Math.floor((end - Date.now()) / 1000));
+        const h = String(Math.floor(rem / 3600)).padStart(2, "0");
+        const m = String(Math.floor((rem % 3600) / 60)).padStart(2, "0");
+        const s = String(rem % 60).padStart(2, "0");
         el.textContent = `${h}:${m}:${s}`;
-        if (rem <= 0) clearInterval(countdownTimer);
-      }
+        if (rem > 0) setTimeout(tick, 1000);
+      };
       tick();
-      countdownTimer = setInterval(tick, 1000);
     }
 
-    function makeQR(text) {
-      const holder = $("#qr");
-      holder.innerHTML = "";
-      new QRCode(holder, { text, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
+    async function loadFile() {
+      const url = `https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`;
+      const res = await fetch(url, { headers: { Authorization: `token ${CONFIG.TOKEN}` } });
+      if (!res.ok) throw new Error("GitHub file fetch failed");
+      return await res.json();
     }
 
-    function copyDeposit() {
-      const t = $("#depositAddress").textContent;
-      navigator.clipboard.writeText(t).then(()=>{
-        const btn = $("#copyDeposit");
-        btn.textContent = "✓";
-        setTimeout(()=> btn.textContent = I18N[currentLang].copy, 800);
+    async function updateForms(sender, receiver) {
+      const file = await loadFile();
+      const existing = JSON.parse(atob(file.content));
+      const newEntry = {
+        sender,
+        receiver,
+        timestamp: new Date().toISOString(),
+        status: "pending"
+      };
+      existing.push(newEntry);
+      const updatedContent = btoa(JSON.stringify(existing, null, 2));
+
+      const res = await fetch(`https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${CONFIG.TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "New swap request",
+          content: updatedContent,
+          sha: file.sha
+        })
       });
+
+      const result = await res.json();
+      if (res.ok) alert("✅ Swap request saved to GitHub JSON!");
+      else alert("❌ Error: " + (result.message || "unknown"));
     }
 
-    function showSession(addr) {
-      $("#inactiveHint").classList.add("hidden");
-      $("#sessionPanel").classList.remove("hidden");
-      $("#depositAddress").textContent = addr;
-      makeQR(addr);
-      startCountdown(CONFIG.SESSION_SECONDS);
-    }
-
-    function initLanguageSelector() {
-      const sel = $("#langSelect");
-      const saved = localStorage.getItem("gasswap_lang");
-      sel.value = saved ? saved : "auto";
-      sel.addEventListener("change", ()=>{
-        const v = sel.value;
-        if (v === "auto") {
-          localStorage.removeItem("gasswap_lang");
-          pickAutoLang().then(l => { currentLang = l; applyI18n(); });
-        } else {
-          localStorage.setItem("gasswap_lang", v);
-          currentLang = v;
-          applyI18n();
-        }
-      });
-    }
-
-    function initStaticLinks() {
-      $("#footerBsc").href   = bscAddrURL(CONFIG.SERVER_WALLETS.BSC);
-      $("#footerTrx").href   = tronAddrURL(CONFIG.SERVER_WALLETS.TRX);
-      $("#serverBscLink").href = bscAddrURL(CONFIG.SERVER_WALLETS.BSC);
-      $("#serverTrxLink").href = tronAddrURL(CONFIG.SERVER_WALLETS.TRX);
-    }
-
-    async function submitToServer(payload) {
-      try {
-        await fetch(CONFIG.FORM_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          mode: "cors"
-        });
-        // 서버 응답 구조가 정해지면 여기서 안내 메시지/상태 업데이트 가능
-      } catch (e) {
-        console.warn("Submit failed (non-blocking):", e);
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
       $("#year").textContent = new Date().getFullYear();
 
-      // Language auto (client IP based)
-      currentLang = await pickAutoLang();
-      applyI18n();
-      initLanguageSelector();
-      initStaticLinks();
-
-      // Form
       $("#swapForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const sender = $("#sender").value.trim();
         const receiver = $("#receiver").value.trim();
-        const errEl = $("#formError");
+        const err = $("#formError");
 
         if (!isEVM(sender)) {
-          errEl.textContent = I18N[currentLang].err_sender; errEl.classList.remove("hidden"); return;
+          err.textContent = "Invalid BSC address"; err.classList.remove("hidden"); return;
         }
         if (!isTRX(receiver)) {
-          errEl.textContent = I18N[currentLang].err_receiver; errEl.classList.remove("hidden"); return;
+          err.textContent = "Invalid TRX address"; err.classList.remove("hidden"); return;
         }
-        errEl.classList.add("hidden");
+        err.classList.add("hidden");
 
-        // UI 세션 표시
-        showSession(CONFIG.SERVER_WALLETS.BSC);
-
-        // 사용자 탐색기 링크
+        showSession();
         $("#userExplorers").classList.remove("hidden");
-        $("#userBscLink").href = bscAddrURL(sender);
-        $("#userBscLink").textContent = I18N[currentLang].bscSenderLink;
-        $("#userTrxLink").href = tronAddrURL(receiver);
-        $("#userTrxLink").textContent = I18N[currentLang].trxReceiverLink;
+        $("#userBscLink").href = `https://bscscan.com/address/${sender}`;
+        $("#userTrxLink").href = `https://tronscan.org/#/address/${receiver}`;
 
-        // 서버 제출 (비차단)
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const payload = {
-          route: "BNB(BSC)->TRX",
-          sender, receiver,
-          lang: currentLang,
-          country: geoInfo.country,
-          tz,
-          userAgent: navigator.userAgent
-        };
-        submitToServer(payload);
+        await updateForms(sender, receiver);
       });
-
-      $("#copyDeposit").addEventListener("click", copyDeposit);
     });
   </script>
 </body>
