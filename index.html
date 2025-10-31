@@ -1,1 +1,112 @@
-.
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GasSwap | Cross-Chain Simplified</title>
+  <link rel="icon" href="https://fav.farm/⚡" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Pretendard", Arial, sans-serif;
+      background: linear-gradient(180deg, #060b12, #101820);
+      color: #fff;
+      text-align: center;
+    }
+    header {
+      padding: 60px 20px 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.3em;
+      letter-spacing: -1px;
+    }
+    h2 {
+      font-weight: 400;
+      color: #9ecfff;
+      margin-top: 0;
+    }
+    .desc {
+      max-width: 640px;
+      margin: 40px auto;
+      line-height: 1.7;
+      color: #ccc;
+    }
+    .cta {
+      margin-top: 40px;
+    }
+    button {
+      background: #00aaff;
+      border: none;
+      color: white;
+      padding: 14px 28px;
+      font-size: 1.1em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #33bbff;
+      transform: translateY(-2px);
+    }
+    footer {
+      margin-top: 80px;
+      padding: 40px;
+      font-size: 0.9em;
+      color: #999;
+    }
+    .social a {
+      color: #00aaff;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>⚡ GasSwap</h1>
+    <h2>Cross-Chain Bridge for BSC, ETH, TRON (and more)</h2>
+  </header>
+
+  <section class="desc">
+    <p>
+      GasSwap은 멀티체인 시대를 위한 간단하고 안전한 교환 플랫폼입니다.<br>
+      사용자는 단 한 번의 클릭으로 BSC ↔ TRON ↔ ETH 간 자산을 전송할 수 있습니다.<br><br>
+      현재 베타 버전에서는 <strong>BSC → TRON</strong> 전송 기능만 활성화되어 있습니다.
+    </p>
+
+    <div class="cta">
+      <button onclick="sendForm()">사용자 폼 전송 (테스트)</button>
+    </div>
+
+    <p id="result" style="margin-top:20px; color:#9ecfff;"></p>
+  </section>
+
+  <footer>
+    <div class="social">
+      <a href="https://twitter.com/" target="_blank">Twitter</a> |
+      <a href="https://t.me/" target="_blank">Telegram</a> |
+      <a href="mailto:admin@gasswap.io">Email</a>
+    </div>
+    <p>© 2025 GasSwap. All rights reserved.</p>
+  </footer>
+
+  <script>
+    async function sendForm() {
+      const result = document.getElementById("result");
+      result.textContent = "요청 전송 중...";
+      try {
+        // 👇 여기에 백엔드 API 주소를 넣으세요 (Cloudflare 경유)
+        const res = await fetch("https://api.yourdomain.com/test", { method: "POST" });
+        if (res.ok) {
+          result.textContent = "✅ 백엔드 연결 성공!";
+        } else {
+          result.textContent = "⚠️ 백엔드 응답 실패 (" + res.status + ")";
+        }
+      } catch (err) {
+        result.textContent = "❌ 연결 오류: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
