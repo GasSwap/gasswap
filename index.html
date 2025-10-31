@@ -23,15 +23,17 @@
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-400"></div>
         <h1 class="text-lg font-semibold tracking-tight">GasSwap</h1>
-        <span class="ml-2 text-xs text-slate-400">v1.1</span>
+        <span class="ml-2 text-xs text-slate-400">v1.2</span>
       </div>
 
       <!-- Swap Menu -->
       <nav class="flex flex-wrap gap-3 text-sm text-slate-400 font-medium">
         <a href="#" class="text-emerald-400">BNB → TRX</a>
-        <span class="disabled-link">BSC → ETH</span>
-        <span class="disabled-link">ETH → TRX</span>
-        <span class="disabled-link">TRX → ETH</span>
+        <span class="disabled-link">TRX → BNB</span>
+        <span class="disabled-link">BNB → ETH</span>
+        <span class="disabled-link">ETH → BNB</span>
+        <span class="disabled-link">BNB → POL</span>
+        <span class="disabled-link">POL → BNB</span>
       </nav>
 
       <!-- Language flags -->
@@ -104,7 +106,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
-              <div class="text-[10px] text-slate-500 mt-1">Scan to deposit</div>
+              <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
             </div>
             <div>
               <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
@@ -114,6 +116,14 @@
         </div>
       </div>
     </section>
+
+    <!-- NOTICE -->
+    <section class="mt-8 text-center">
+      <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
+        ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted.  
+        Please send only small amounts for gas purposes.
+      </div>
+    </section>
   </main>
 
   <footer class="mt-10 py-10 text-center text-xs text-slate-500">
@@ -121,7 +131,6 @@
   </footer>
 
   <script>
-    // === CONFIG ===
     const CONFIG = {
       FORM_ENDPOINT: "https://gasswap-proxy.workers.dev",
       SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
@@ -129,11 +138,81 @@
     };
 
     const I18N = {
-      en: { title:"BNB (BSC) → TRX Cross-Swap", subtitle:"Deposit BNB (BSC) and receive TRX automatically after confirmation.", formTitle:"Create deposit session", labelSender:"Sender (BNB BSC)", labelReceiver:"Receiver (TRX)", start:"Start Swap", err_sender:"Invalid BSC address", err_receiver:"Invalid TRX address" },
-      ko: { title:"BNB (BSC) → TRX 크로스스왑", subtitle:"BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.", formTitle:"입금 세션 만들기", labelSender:"보내는 지갑 (BNB BSC)", labelReceiver:"받는 지갑 (TRX)", start:"스왑 시작하기", err_sender:"BNB(BSC) 주소가 올바르지 않습니다.", err_receiver:"TRX 주소가 올바르지 않습니다." },
-      ja: { title:"BNB (BSC) → TRX クロススワップ", subtitle:"BNB(BSC)を入金すると、確認後にTRXが自動送付されます。", formTitle:"入金セッションを作成", labelSender:"送信元 (BNB BSC)", labelReceiver:"受信先 (TRX)", start:"スワップ開始", err_sender:"BSCアドレスが無効です。", err_receiver:"TRXアドレスが無効です。" },
-      zh: { title:"BNB (BSC) → TRX 跨链兑换", subtitle:"入金 BNB(BSC)，确认后自动收到 TRX。", formTitle:"创建入金会话", labelSender:"发送地址 (BNB BSC)", labelReceiver:"接收地址 (TRX)", start:"开始兑换", err_sender:"无效的 BSC 地址", err_receiver:"无效的 TRX 地址" },
-      es: { title:"BNB (BSC) → TRX Intercambio cruzado", subtitle:"Deposita BNB (BSC) y recibe TRX automáticamente tras la confirmación.", formTitle:"Crear sesión de depósito", labelSender:"Remitente (BNB BSC)", labelReceiver:"Receptor (TRX)", start:"Iniciar intercambio", err_sender:"Dirección BSC inválida", err_receiver:"Dirección TRX inválida" }
+      en: {
+        title:"BNB (BSC) → TRX Cross-Swap",
+        subtitle:"Deposit BNB (BSC) and receive TRX automatically after confirmation.",
+        formTitle:"Create deposit session",
+        labelSender:"Sender (BNB BSC)",
+        labelReceiver:"Receiver (TRX)",
+        start:"Start Swap",
+        sessionTitle:"Deposit session",
+        depositTo:"Deposit to (fixed address)",
+        scanToDeposit:"Scan to deposit",
+        deadlineLabel:"Deposit deadline",
+        notice:"⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.",
+        err_sender:"Invalid BSC address",
+        err_receiver:"Invalid TRX address"
+      },
+      ko: {
+        title:"BNB (BSC) → TRX 크로스스왑",
+        subtitle:"BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.",
+        formTitle:"입금 세션 만들기",
+        labelSender:"보내는 지갑 (BNB BSC)",
+        labelReceiver:"받는 지갑 (TRX)",
+        start:"스왑 시작하기",
+        sessionTitle:"입금 세션",
+        depositTo:"입금 주소 (고정)",
+        scanToDeposit:"입금용 QR 코드",
+        deadlineLabel:"입금 제한시간",
+        notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
+        err_sender:"BNB(BSC) 주소가 올바르지 않습니다.",
+        err_receiver:"TRX 주소가 올바르지 않습니다."
+      },
+      ja: {
+        title:"BNB (BSC) → TRX クロススワップ",
+        subtitle:"BNB(BSC)を入金すると、確認後にTRXが自動送付されます。",
+        formTitle:"入金セッションを作成",
+        labelSender:"送信元 (BNB BSC)",
+        labelReceiver:"受信先 (TRX)",
+        start:"スワップ開始",
+        sessionTitle:"入金セッション",
+        depositTo:"入金先アドレス (固定)",
+        scanToDeposit:"入金用QRコード",
+        deadlineLabel:"入金期限",
+        notice:"⚠️ セキュリティのため、1 USDT未満または20 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
+        err_sender:"BSCアドレスが無効です。",
+        err_receiver:"TRXアドレスが無効です。"
+      },
+      zh: {
+        title:"BNB (BSC) → TRX 跨链兑换",
+        subtitle:"入金 BNB(BSC)，确认后自动收到 TRX。",
+        formTitle:"创建入金会话",
+        labelSender:"发送地址 (BNB BSC)",
+        labelReceiver:"接收地址 (TRX)",
+        start:"开始兑换",
+        sessionTitle:"入金会话",
+        depositTo:"入金地址（固定）",
+        scanToDeposit:"扫描二维码入金",
+        deadlineLabel:"入金截止时间",
+        notice:"⚠️ 为了安全，请勿转入1 USDT以下或20 USDT以上金额。仅用于Gas的小额入金。",
+        err_sender:"无效的 BSC 地址",
+        err_receiver:"无效的 TRX 地址"
+      },
+      es: {
+        title:"BNB (BSC) → TRX Intercambio cruzado",
+        subtitle:"Deposita BNB (BSC) y recibe TRX automáticamente tras la confirmación.",
+        formTitle:"Crear sesión de depósito",
+        labelSender:"Remitente (BNB BSC)",
+        labelReceiver:"Receptor (TRX)",
+        start:"Iniciar intercambio",
+        sessionTitle:"Sesión de depósito",
+        depositTo:"Depositar en (dirección fija)",
+        scanToDeposit:"Escanear para depositar",
+        deadlineLabel:"Plazo de depósito",
+        notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 1 USDT o mayores a 20 USDT. Envía solo pequeñas cantidades con fines de gas.",
+        err_sender:"Dirección BSC inválida",
+        err_receiver:"Dirección TRX inválida"
+      }
     };
 
     const $ = s => document.querySelector(s);
@@ -169,6 +248,11 @@
       $("#labelSender").textContent = t.labelSender;
       $("#labelReceiver").textContent = t.labelReceiver;
       $("#startBtn").textContent = t.start;
+      $("#sessionTitle").textContent = t.sessionTitle;
+      $("#depositTo").textContent = t.depositTo;
+      $("#scanToDeposit").textContent = t.scanToDeposit;
+      $("#deadlineLabel").textContent = t.deadlineLabel;
+      $("#noticeBox").textContent = t.notice;
     }
 
     function highlightFlag() {
@@ -196,7 +280,6 @@
       applyLang();
       highlightFlag();
 
-      // Flag switching
       document.querySelectorAll(".flag-btn").forEach(f=>{
         f.addEventListener("click",()=>{
           currentLang = f.dataset.lang;
@@ -221,4 +304,4 @@
     });
   </script>
 </body>
-</html>
+</html
