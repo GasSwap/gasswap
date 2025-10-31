@@ -3,46 +3,71 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GasSwap – BNB (BSC) → TRX Cross-Swap</title>
+  <title>GasSwap – Cross-Chain Swap</title>
   <meta name="description" content="Deposit BNB (BSC) and receive TRX automatically. Simple cross-chain swap request UI." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>a { word-break: break-all; }</style>
+  <style>
+    a { word-break: break-all; }
+    .disabled-link { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .flag-btn { font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.2s; }
+    .flag-btn:hover { opacity: 1; transform: scale(1.1); }
+    .flag-active { opacity: 1; border-bottom: 2px solid #34d399; }
+  </style>
 </head>
 
 <body class="min-h-screen bg-slate-950 text-slate-100">
+  <!-- HEADER -->
   <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-20">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-400"></div>
         <h1 class="text-lg font-semibold tracking-tight">GasSwap</h1>
-        <span class="ml-2 text-xs text-slate-400">v1.0 – Worker Integration</span>
+        <span class="ml-2 text-xs text-slate-400">v1.1</span>
+      </div>
+
+      <!-- Swap Menu -->
+      <nav class="flex flex-wrap gap-3 text-sm text-slate-400 font-medium">
+        <a href="#" class="text-emerald-400">BNB → TRX</a>
+        <span class="disabled-link">BSC → ETH</span>
+        <span class="disabled-link">ETH → TRX</span>
+        <span class="disabled-link">TRX → ETH</span>
+      </nav>
+
+      <!-- Language flags -->
+      <div class="flex items-center gap-3 text-lg">
+        <span class="flag-btn" data-lang="en">🇺🇸</span>
+        <span class="flag-btn" data-lang="ko">🇰🇷</span>
+        <span class="flag-btn" data-lang="ja">🇯🇵</span>
+        <span class="flag-btn" data-lang="zh">🇨🇳</span>
+        <span class="flag-btn" data-lang="es">🇪🇸</span>
       </div>
     </div>
   </header>
 
+  <!-- MAIN -->
   <main class="max-w-5xl mx-auto px-4 py-8">
-    <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6">
-      <h2 class="text-2xl font-semibold mb-2">BNB (BSC) → TRX Cross-Swap</h2>
-      <p class="text-slate-400 text-sm">Deposit BNB (BSC) and receive TRX automatically after confirmation.</p>
+    <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6 text-center">
+      <h2 id="title" class="text-2xl font-semibold mb-2">BNB (BSC) → TRX Cross-Swap</h2>
+      <p id="subtitle" class="text-slate-400 text-sm">Deposit BNB (BSC) and receive TRX automatically after confirmation.</p>
     </section>
 
     <section class="grid md:grid-cols-2 gap-6">
       <!-- Left: Form -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 class="text-lg font-semibold mb-4">Create deposit session</h3>
+        <h3 id="formTitle" class="text-lg font-semibold mb-4">Create deposit session</h3>
         <form id="swapForm" class="space-y-4" novalidate>
           <div>
-            <label class="block text-sm mb-1">Sender (BNB BSC)</label>
+            <label id="labelSender" class="block text-sm mb-1">Sender (BNB BSC)</label>
             <input id="sender" type="text"
               class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm"
-              placeholder="0x… (BNB BSC address)" required />
+              placeholder="0x…" required />
           </div>
           <div>
-            <label class="block text-sm mb-1">Receiver (TRX)</label>
+            <label id="labelReceiver" class="block text-sm mb-1">Receiver (TRX)</label>
             <input id="receiver" type="text"
               class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm"
-              placeholder="T… (TRON base58 address)" required />
+              placeholder="T…" required />
           </div>
 
           <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
@@ -54,7 +79,7 @@
         </form>
 
         <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2">
-          <div>You can verify your wallets on explorers:</div>
+          <div id="youCanCheck">You can verify your wallets on explorers:</div>
           <a id="userBscLink" target="_blank" class="block underline hover:text-emerald-300"></a>
           <a id="userTrxLink" target="_blank" class="block underline hover:text-emerald-300"></a>
         </div>
@@ -62,14 +87,14 @@
 
       <!-- Right: Session -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 class="text-lg font-semibold mb-4">Deposit session</h3>
+        <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
         <div id="inactiveHint" class="text-sm text-slate-400">
           Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session.
         </div>
 
         <div id="sessionPanel" class="hidden space-y-4">
           <div>
-            <div class="text-xs text-slate-400">Deposit to (fixed address)</div>
+            <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
             <div class="mt-1 flex items-center gap-2">
               <code id="depositAddress" class="text-emerald-200 break-all"></code>
               <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
@@ -82,7 +107,7 @@
               <div class="text-[10px] text-slate-500 mt-1">Scan to deposit</div>
             </div>
             <div>
-              <div class="text-xs text-slate-400">Deposit deadline</div>
+              <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
               <div id="countdown" class="text-3xl font-mono mt-1">01:00:00</div>
             </div>
           </div>
@@ -98,80 +123,100 @@
   <script>
     // === CONFIG ===
     const CONFIG = {
-      FORM_ENDPOINT: "https://gasswap-proxy.workers.dev", // 👈 Cloudflare Worker 주소
+      FORM_ENDPOINT: "https://gasswap-proxy.workers.dev",
       SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
       SESSION_SECONDS: 3600
     };
 
-    const $ = (s) => document.querySelector(s);
-    const isEVM = (a) => /^0x[0-9a-fA-F]{40}$/.test(a || "");
-    const isTRX = (a) => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
+    const I18N = {
+      en: { title:"BNB (BSC) → TRX Cross-Swap", subtitle:"Deposit BNB (BSC) and receive TRX automatically after confirmation.", formTitle:"Create deposit session", labelSender:"Sender (BNB BSC)", labelReceiver:"Receiver (TRX)", start:"Start Swap", err_sender:"Invalid BSC address", err_receiver:"Invalid TRX address" },
+      ko: { title:"BNB (BSC) → TRX 크로스스왑", subtitle:"BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.", formTitle:"입금 세션 만들기", labelSender:"보내는 지갑 (BNB BSC)", labelReceiver:"받는 지갑 (TRX)", start:"스왑 시작하기", err_sender:"BNB(BSC) 주소가 올바르지 않습니다.", err_receiver:"TRX 주소가 올바르지 않습니다." },
+      ja: { title:"BNB (BSC) → TRX クロススワップ", subtitle:"BNB(BSC)を入金すると、確認後にTRXが自動送付されます。", formTitle:"入金セッションを作成", labelSender:"送信元 (BNB BSC)", labelReceiver:"受信先 (TRX)", start:"スワップ開始", err_sender:"BSCアドレスが無効です。", err_receiver:"TRXアドレスが無効です。" },
+      zh: { title:"BNB (BSC) → TRX 跨链兑换", subtitle:"入金 BNB(BSC)，确认后自动收到 TRX。", formTitle:"创建入金会话", labelSender:"发送地址 (BNB BSC)", labelReceiver:"接收地址 (TRX)", start:"开始兑换", err_sender:"无效的 BSC 地址", err_receiver:"无效的 TRX 地址" },
+      es: { title:"BNB (BSC) → TRX Intercambio cruzado", subtitle:"Deposita BNB (BSC) y recibe TRX automáticamente tras la confirmación.", formTitle:"Crear sesión de depósito", labelSender:"Remitente (BNB BSC)", labelReceiver:"Receptor (TRX)", start:"Iniciar intercambio", err_sender:"Dirección BSC inválida", err_receiver:"Dirección TRX inválida" }
+    };
 
-    function makeQR(text) {
-      $("#qr").innerHTML = "";
-      new QRCode($("#qr"), { text, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
-    }
+    const $ = s => document.querySelector(s);
+    const isEVM = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
+    const isTRX = a => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
+    let currentLang = "en";
 
-    function showSession() {
-      $("#inactiveHint").classList.add("hidden");
-      $("#sessionPanel").classList.remove("hidden");
-      $("#depositAddress").textContent = CONFIG.SERVER_BSC;
-      makeQR(CONFIG.SERVER_BSC);
-      startCountdown(CONFIG.SESSION_SECONDS);
-    }
-
-    function startCountdown(seconds) {
-      const el = $("#countdown");
-      const end = Date.now() + seconds * 1000;
-      const tick = () => {
-        const rem = Math.max(0, Math.floor((end - Date.now()) / 1000));
-        const h = String(Math.floor(rem / 3600)).padStart(2, "0");
-        const m = String(Math.floor((rem % 3600) / 60)).padStart(2, "0");
-        const s = String(rem % 60).padStart(2, "0");
-        el.textContent = `${h}:${m}:${s}`;
-        if (rem > 0) setTimeout(tick, 1000);
-      };
-      tick();
-    }
-
-    async function updateForms(sender, receiver) {
-      const res = await fetch(CONFIG.FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sender, receiver })
-      });
-
-      if (res.ok) {
-        alert("✅ Swap request saved (via Cloudflare Worker)!");
-      } else {
-        const txt = await res.text();
-        alert("❌ Error: " + txt);
+    async function detectLang() {
+      try {
+        const r = await fetch("https://ipapi.co/json/");
+        const j = await r.json();
+        const c = (j.country_code || "").toUpperCase();
+        if (c === "KR") return "ko";
+        if (c === "JP") return "ja";
+        if (["CN","TW","HK","MO"].includes(c)) return "zh";
+        if (["ES","MX","AR","CO","CL","PE"].includes(c)) return "es";
+        return "en";
+      } catch {
+        const nav = navigator.language.toLowerCase();
+        if (nav.startsWith("ko")) return "ko";
+        if (nav.startsWith("ja")) return "ja";
+        if (nav.startsWith("zh")) return "zh";
+        if (nav.startsWith("es")) return "es";
+        return "en";
       }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    function applyLang() {
+      const t = I18N[currentLang];
+      $("#title").textContent = t.title;
+      $("#subtitle").textContent = t.subtitle;
+      $("#formTitle").textContent = t.formTitle;
+      $("#labelSender").textContent = t.labelSender;
+      $("#labelReceiver").textContent = t.labelReceiver;
+      $("#startBtn").textContent = t.start;
+    }
+
+    function highlightFlag() {
+      document.querySelectorAll(".flag-btn").forEach(f=>{
+        f.classList.toggle("flag-active", f.dataset.lang===currentLang);
+      });
+    }
+
+    function makeQR(text){$("#qr").innerHTML=""; new QRCode($("#qr"),{text,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});}
+    function showSession(){ $("#inactiveHint").classList.add("hidden"); $("#sessionPanel").classList.remove("hidden"); $("#depositAddress").textContent=CONFIG.SERVER_BSC; makeQR(CONFIG.SERVER_BSC); startCountdown(CONFIG.SESSION_SECONDS); }
+    function startCountdown(s){const el=$("#countdown"),end=Date.now()+s*1000;const tick=()=>{const r=Math.max(0,Math.floor((end-Date.now())/1000));const h=String(Math.floor(r/3600)).padStart(2,"0"),m=String(Math.floor((r%3600)/60)).padStart(2,"0"),sec=String(r%60).padStart(2,"0");el.textContent=`${h}:${m}:${sec}`;if(r>0)setTimeout(tick,1000);};tick();}
+
+    async function updateForms(sender, receiver) {
+      const res = await fetch(CONFIG.FORM_ENDPOINT, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender, receiver })
+      });
+      if (res.ok) alert("✅ Swap request saved!");
+      else alert("❌ Error: " + await res.text());
+    }
+
+    document.addEventListener("DOMContentLoaded", async ()=>{
       $("#year").textContent = new Date().getFullYear();
+      currentLang = await detectLang();
+      applyLang();
+      highlightFlag();
 
-      $("#swapForm").addEventListener("submit", async (e) => {
+      // Flag switching
+      document.querySelectorAll(".flag-btn").forEach(f=>{
+        f.addEventListener("click",()=>{
+          currentLang = f.dataset.lang;
+          applyLang();
+          highlightFlag();
+        });
+      });
+
+      $("#swapForm").addEventListener("submit", async e=>{
         e.preventDefault();
-        const sender = $("#sender").value.trim();
-        const receiver = $("#receiver").value.trim();
-        const err = $("#formError");
-
-        if (!isEVM(sender)) {
-          err.textContent = "Invalid BSC address"; err.classList.remove("hidden"); return;
-        }
-        if (!isTRX(receiver)) {
-          err.textContent = "Invalid TRX address"; err.classList.remove("hidden"); return;
-        }
+        const sender=$("#sender").value.trim(), receiver=$("#receiver").value.trim(), err=$("#formError");
+        if(!isEVM(sender)){err.textContent=I18N[currentLang].err_sender;err.classList.remove("hidden");return;}
+        if(!isTRX(receiver)){err.textContent=I18N[currentLang].err_receiver;err.classList.remove("hidden");return;}
         err.classList.add("hidden");
-
+        $("#startBtn").disabled=true;$("#startBtn").classList.add("opacity-50","cursor-not-allowed");
         showSession();
         $("#userExplorers").classList.remove("hidden");
-        $("#userBscLink").href = `https://bscscan.com/address/${sender}`;
-        $("#userTrxLink").href = `https://tronscan.org/#/address/${receiver}`;
-
-        await updateForms(sender, receiver);
+        $("#userBscLink").href=`https://bscscan.com/address/${sender}`;
+        $("#userTrxLink").href=`https://tronscan.org/#/address/${receiver}`;
+        await updateForms(sender,receiver);
       });
     });
   </script>
