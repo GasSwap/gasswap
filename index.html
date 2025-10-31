@@ -16,7 +16,7 @@
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-400"></div>
         <h1 class="text-lg font-semibold tracking-tight">GasSwap</h1>
-        <span class="ml-2 text-xs text-slate-400">v0.3 – GitHub JSON Link</span>
+        <span class="ml-2 text-xs text-slate-400">v1.0 – Worker Integration</span>
       </div>
     </div>
   </header>
@@ -98,10 +98,7 @@
   <script>
     // === CONFIG ===
     const CONFIG = {
-      GITHUB_USER: "GasSwap",
-      REPO: "gasswap-data",
-      FILE_PATH: "data/forms.json",
-       FORM_ENDPOINT: "https://gasswap-proxy.workers.dev", // 👈 Cloudflare Worker 주소
+      FORM_ENDPOINT: "https://gasswap-proxy.workers.dev", // 👈 Cloudflare Worker 주소
       SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
       SESSION_SECONDS: 3600
     };
@@ -137,41 +134,19 @@
       tick();
     }
 
-    async function loadFile() {
-      const url = `https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`;
-      const res = await fetch(url, { headers: { Authorization: `token ${CONFIG.TOKEN}` } });
-      if (!res.ok) throw new Error("GitHub file fetch failed");
-      return await res.json();
-    }
-
     async function updateForms(sender, receiver) {
-      const file = await loadFile();
-      const existing = JSON.parse(atob(file.content));
-      const newEntry = {
-        sender,
-        receiver,
-        timestamp: new Date().toISOString(),
-        status: "pending"
-      };
-      existing.push(newEntry);
-      const updatedContent = btoa(JSON.stringify(existing, null, 2));
-
-      const res = await fetch(`https://api.github.com/repos/${CONFIG.GITHUB_USER}/${CONFIG.REPO}/contents/${CONFIG.FILE_PATH}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `token ${CONFIG.TOKEN}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: "New swap request",
-          content: updatedContent,
-          sha: file.sha
-        })
+      const res = await fetch(CONFIG.FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender, receiver })
       });
 
-      const result = await res.json();
-      if (res.ok) alert("✅ Swap request saved to GitHub JSON!");
-      else alert("❌ Error: " + (result.message || "unknown"));
+      if (res.ok) {
+        alert("✅ Swap request saved (via Cloudflare Worker)!");
+      } else {
+        const txt = await res.text();
+        alert("❌ Error: " + txt);
+      }
     }
 
     document.addEventListener("DOMContentLoaded", () => {
