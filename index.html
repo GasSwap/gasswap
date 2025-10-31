@@ -119,6 +119,31 @@
   </footer>
 
   <script>
+// 🌐 Detect language by IP (using ipapi.co)
+async function detectLangByIP() {
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    const country = (data.country_code || "").toUpperCase();
+
+    // Country → language mapping
+    if (["KR"].includes(country)) return "ko";
+    if (["JP"].includes(country)) return "ja";
+    if (["CN", "TW", "HK"].includes(country)) return "zh";
+    if (["ES", "MX", "AR", "CO", "CL", "PE"].includes(country)) return "es";
+    return "en";
+  } catch {
+    return "en";
+  }
+}
+
+// 사용 예시:
+document.addEventListener("DOMContentLoaded", async () => {
+  let lang = localStorage.getItem("gasswap_lang");
+  if (!lang) lang = await detectLangByIP();
+  currentLang = lang;
+  applyI18n();
+});
     const CONFIG = {
       SERVER_WALLETS: {
         BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
