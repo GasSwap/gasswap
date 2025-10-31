@@ -23,7 +23,7 @@
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-400 to-cyan-400"></div>
         <h1 class="text-lg font-semibold tracking-tight">GasSwap</h1>
-        <span class="ml-2 text-xs text-slate-400">v1.2</span>
+        <span class="ml-2 text-xs text-slate-400">v1.0</span>
       </div>
 
       <!-- Language flags -->
@@ -41,7 +41,7 @@
   <main class="max-w-5xl mx-auto px-4 py-8">
     <!-- Title -->
     <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6 text-center">
-      <h2 id="title" class="text-2xl font-semibold mb-1">BNB (BSC) → TRX Cross-Swap</h2>
+      <h2 id="title" class="text-2xl font-semibold mb-1">BNB (BSC) → TRX</h2>
       <h3 class="text-sm text-slate-500 tracking-wide mb-2">Cross-Chain Swap</h3>
       <p id="subtitle" class="text-slate-400 text-sm">Deposit BNB (BSC) and receive TRX automatically after confirmation.</p>
     </section>
@@ -83,10 +83,13 @@
           </button>
         </form>
 
-        <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2">
+        <!-- Wallet Links -->
+        <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-1">
           <div id="youCanCheck">You can verify your wallets on explorers:</div>
-          <a id="userBscLink" target="_blank" class="block underline hover:text-emerald-300"></a>
-          <a id="userTrxLink" target="_blank" class="block underline hover:text-emerald-300"></a>
+          <div class="flex flex-col gap-1 mt-2">
+            <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">🔗 View your BNB (BSC) wallet on BscScan</a>
+            <a id="userTrxLink" target="_blank" class="underline hover:text-emerald-300">🔗 View your TRX wallet on Tronscan</a>
+          </div>
         </div>
       </div>
 
@@ -140,75 +143,9 @@
       SESSION_SECONDS: 3600
     };
 
-    const I18N = {
-      en: {
-        title:"BNB (BSC) → TRX Cross-Swap",
-        subtitle:"Deposit BNB (BSC) and receive TRX automatically after confirmation.",
-        formTitle:"Please fill this form before sending your tokens",
-        labelSender:"Sender (BNB BSC)",
-        labelReceiver:"Receiver (TRX)",
-        start:"Start Swap",
-        sessionTitle:"Deposit session",
-        inactiveHint:"Fill the form and press ‘Start Swap’.",
-        depositTo:"Deposit to (fixed address)",
-        scanToDeposit:"Scan to deposit",
-        deadlineLabel:"Deposit deadline",
-        notice:"⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.",
-        err_sender:"Invalid BSC address",
-        err_receiver:"Invalid TRX address"
-      },
-      ko: {
-        title:"BNB (BSC) → TRX 크로스스왑",
-        subtitle:"BNB(BSC)를 입금하면 확인 후 TRX가 자동 전송됩니다.",
-        formTitle:"토큰을 보내기 전에 먼저 작성하세요",
-        labelSender:"보내는 지갑 (BNB BSC)",
-        labelReceiver:"받는 지갑 (TRX)",
-        start:"스왑 시작하기",
-        sessionTitle:"입금 세션",
-        inactiveHint:"폼을 작성하고 ‘스왑 시작하기’를 눌러주세요.",
-        depositTo:"입금 주소 (고정)",
-        scanToDeposit:"입금용 QR 코드",
-        deadlineLabel:"입금 제한시간",
-        notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
-        err_sender:"BNB(BSC) 주소가 올바르지 않습니다.",
-        err_receiver:"TRX 주소가 올바르지 않습니다."
-      }
-    };
-
     const $ = s => document.querySelector(s);
     const isEVM = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
     const isTRX = a => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
-    let currentLang = "en";
-
-    async function detectLang() {
-      try {
-        const r = await fetch("https://ipapi.co/json/");
-        const j = await r.json();
-        const c = (j.country_code || "").toUpperCase();
-        if (c === "KR") return "ko";
-        return "en";
-      } catch { return "en"; }
-    }
-
-    function applyLang() {
-      const t = I18N[currentLang];
-      $("#title").textContent = t.title;
-      $("#subtitle").textContent = t.subtitle;
-      $("#formTitle").textContent = t.formTitle;
-      $("#labelSender").textContent = t.labelSender;
-      $("#labelReceiver").textContent = t.labelReceiver;
-      $("#startBtn").textContent = t.start;
-      $("#sessionTitle").textContent = t.sessionTitle;
-      $("#depositTo").textContent = t.depositTo;
-      $("#scanToDeposit").textContent = t.scanToDeposit;
-      $("#deadlineLabel").textContent = t.deadlineLabel;
-      $("#noticeBox").textContent = t.notice;
-      $("#inactiveHint").textContent = t.inactiveHint;
-    }
-
-    function highlightFlag() {
-      document.querySelectorAll(".flag-btn").forEach(f=> f.classList.toggle("flag-active", f.dataset.lang===currentLang));
-    }
 
     function makeQR(text){$("#qr").innerHTML=""; new QRCode($("#qr"),{text,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});}
     function showSession(){ $("#inactiveHint").classList.add("hidden"); $("#sessionPanel").classList.remove("hidden"); $("#depositAddress").textContent=CONFIG.SERVER_BSC; makeQR(CONFIG.SERVER_BSC); startCountdown(CONFIG.SESSION_SECONDS); }
@@ -223,19 +160,14 @@
       else alert("❌ Error: " + await res.text());
     }
 
-    document.addEventListener("DOMContentLoaded", async ()=>{
+    document.addEventListener("DOMContentLoaded", ()=>{
       $("#year").textContent = new Date().getFullYear();
-      currentLang = await detectLang();
-      applyLang();
-      highlightFlag();
-
-      document.querySelectorAll(".flag-btn").forEach(f=> f.addEventListener("click",()=>{currentLang=f.dataset.lang;applyLang();highlightFlag();}));
 
       $("#swapForm").addEventListener("submit", async e=>{
         e.preventDefault();
         const sender=$("#sender").value.trim(), receiver=$("#receiver").value.trim(), err=$("#formError");
-        if(!isEVM(sender)){err.textContent=I18N[currentLang].err_sender;err.classList.remove("hidden");return;}
-        if(!isTRX(receiver)){err.textContent=I18N[currentLang].err_receiver;err.classList.remove("hidden");return;}
+        if(!isEVM(sender)){err.textContent="Invalid BSC address";err.classList.remove("hidden");return;}
+        if(!isTRX(receiver)){err.textContent="Invalid TRX address";err.classList.remove("hidden");return;}
         err.classList.add("hidden");
         $("#startBtn").disabled=true;$("#startBtn").classList.add("opacity-50","cursor-not-allowed");
         showSession();
