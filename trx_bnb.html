@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GasSwap – Cross-Chain Swap</title>
+  <title>GasSwap – TRX → BNB (BSC)</title>
   <meta name="description" content="Deposit TRX and receive BNB (BSC) automatically. Simple cross-chain swap request UI." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -46,7 +46,7 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <a href="index.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
+  <a href="bnb_trx.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
   <a href="trx_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">TRX → BNB</a>
   <button data-type="bnb-eth" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → ETH</button>
   <button data-type="eth-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">ETH → BNB</button>
@@ -54,93 +54,92 @@
   <button data-type="pol-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">POL → BNB</button>
 </section>
 
-<!-- Form + Session -->
-<section class="grid md:grid-cols-2 gap-6">
-  <!-- Left: Form -->
-  <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-    <h3 id="formTitle" class="text-lg font-semibold mb-4">Please fill this form before sending your tokens</h3>
-    <form id="swapForm" class="space-y-4" novalidate>
-      <div>
-        <label id="labelSender" class="block text-sm mb-1">Sender (TRX)</label>
-        <input id="sender" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="T…" required />
-      </div>
-      <div>
-        <label id="labelReceiver" class="block text-sm mb-1">Receiver (BNB BSC)</label>
-        <input id="receiver" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="0x…" required />
-      </div>
-      <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
-      <button id="startBtn" type="submit" class="w-full rounded-xl px-4 py-3 bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 focus:outline-none"> Start Swap </button>
-    </form>
+    <!-- Form + Session -->
+    <section class="grid md:grid-cols-2 gap-6">
+      <!-- Left: Form -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <h3 id="formTitle" class="text-lg font-semibold mb-4">Please fill this form before sending your tokens</h3>
+        <form id="swapForm" class="space-y-4" novalidate>
+          <div>
+            <label id="labelSender" class="block text-sm mb-1">Sender (TRX)</label>
+            <input id="sender" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="T..." required />
+          </div>
+          <div>
+            <label id="labelReceiver" class="block text-sm mb-1">Receiver (BNB BSC)</label>
+            <input id="receiver" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="0x…" required />
+          </div>
+          <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
+          <button id="startBtn" type="submit" class="w-full rounded-xl px-4 py-3 bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 focus:outline-none"> Start Swap </button>
+        </form>
 
-    <!-- Wallet Links -->
-    <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2 w-[95%] mx-auto">
-      <div id="youCanCheck">Check Explorers:</div>
-      <div class="mt-1"> 🔗 <a id="userTrxLink" target="_blank" class="underline hover:text-emerald-300">Tronscan(Sender)</a> </div>
-      <div> 🔗 <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">BscScan(Receiver)</a> </div>
-    </div>
-  </div>
-
-  <!-- Right: Session -->
-  <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-    <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
-    <div id="inactiveHint" class="text-sm text-slate-400">
-      Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session.
-    </div>
-    <div id="sessionPanel" class="hidden space-y-4">
-      <div>
-        <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
-        <div class="mt-1 flex items-center gap-2">
-          <code id="depositAddress" class="text-emerald-200 break-all"></code>
-          <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
+        <!-- Wallet Links -->
+      <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2 w-[95%] mx-auto">
+          <div id="youCanCheck">Check Explorers:</div>
+          <div class="mt-1"> 🔗 <a id="userTrxLink" target="_blank" class="underline hover:text-emerald-300">Tronscan(Sender)</a> </div>
+          <div> 🔗 <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">BscScan(Receiver)</a> </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
-          <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
-        </div>
-        <div>
-          <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
-          <div id="countdown" class="text-3xl font-mono mt-1 text-right">01:00</div>
+
+      <!-- Right: Session -->
+      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+        <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
+        <div id="inactiveHint" class="text-sm text-slate-400"> Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session. </div>
+        <div id="sessionPanel" class="hidden space-y-4">
+          <div>
+            <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
+            <div class="mt-1 flex items-center gap-2">
+              <code id="depositAddress" class="text-emerald-200 break-all"></code>
+              <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
+              <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
+             
+            <div>
+              <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
+              <div id="countdown" class="text-3xl font-mono mt-1">01:00:00</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- NOTICE -->
-<section class="mt-8 text-center">
-  <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
-    ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.
-  </div>
-</section>
+    <!-- NOTICE -->
+    <section class="mt-8 text-center">
+      <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
+        ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.
+      </div>
+    </section>
 
-<!-- INFO SECTION -->
-<section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
-  <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
-    <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
-    <ul class="list-disc list-inside space-y-1">
-      <li>No need to connect your wallet</li>
-      <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
-      <li>Simple process: just send and receive</li>
-      <li>Instant verification on blockchain explorers</li>
-    </ul>
-    <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
-    <ol class="list-decimal list-inside space-y-1">
-      <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
-      <li>Send TRX to the displayed deposit address</li>
-      <li>Receive BNB automatically (usually within 5 minutes depending on network conditions)</li>
-      <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing).</li>
-    </ol>
-  </div>
-</section>
-</main>
+    <!-- INFO SECTION -->
+    <section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
+      <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
+        <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
+        <ul class="list-disc list-inside space-y-1">
+          <li>No need to connect your wallet</li>
+          <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
+          <li>Simple process: just send and receive</li>
+          <li>Instant verification on blockchain explorers</li>
+        </ul>
+        <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
+        <ol class="list-decimal list-inside space-y-1">
+          <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
+          <li>Send TRX to the displayed deposit address</li>
+          <li>Receive BNB automatically (usually within 5 minutes depending on network conditions)</li>
+          <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing).</li>
+        </ol>
 
-<footer class="mt-10 py-10 text-center text-xs text-slate-500">
-  © <span id="year"></span> GasSwap
-</footer>
+      </div>
+    </section>
+  </main>
 
-<script>
+  <footer class="mt-10 py-10 text-center text-xs text-slate-500">
+    © <span id="year"></span> GasSwap
+  </footer>
+
+  <script>
 const CONFIG = {
   FORM_ENDPOINT: "https://gasswap-proxy.workers.dev",
   SERVER_TRX: "TDhFfK9nXvdp2kUq3pP7b3p7aYjV3kJb7T",
@@ -150,24 +149,232 @@ const CONFIG = {
 const $ = s => document.querySelector(s);
 const isEVM = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
 const isTRX = a => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
+let currentLang = "en";
 
+// ✅ 다국어 번역 객체 (index.html과 동일 구조)
+const I18N = {
+  en: {
+    title:"TRX → BNB (BSC)",
+    subtitle:"Deposit TRX and receive BNB (BSC) automatically after confirmation.",
+    formTitle:"Please fill this form before sending your tokens",
+    labelSender:"Sender (TRX)",
+    labelReceiver:"Receiver (BNB BSC)",
+    start:"Start Swap",
+    sessionTitle:"Deposit session",
+    depositTo:"Deposit to (fixed address)",
+    scanToDeposit:"Scan to deposit",
+    deadlineLabel:"Deposit deadline",
+    youCanCheck:"Check Explorers:",
+    viewTrx:"Tronscan(Sender)",
+    viewBsc:"BscScan(Receiver)",
+    why:"Why Use GasSwap?",
+    whyList:[
+      "No need to connect your wallet",
+      "Lowest cross-swap fee: +0.5 USDT equivalent token per transaction",
+      "Simple process: just send and receive",
+      "Instant verification on blockchain explorers"
+    ],
+    how:"How to Use",
+    howList:[
+      "Enter both the Sender and Receiver wallet addresses correctly",
+      "Send TRX to the displayed deposit address",
+      "Receive BNB automatically (usually within 5 minutes depending on network conditions)",
+      "To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing)."
+    ],
+    notice:"⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.",
+    err_sender:"Invalid TRX address",
+    err_receiver:"Invalid BSC address"
+  },
+  ko: {
+    title:"TRX → BNB (BSC)",
+    subtitle:"TRX를 입금하면 확인 후 BNB(BSC)가 자동 전송됩니다.",
+    formTitle:"토큰을 보내기 전에 먼저 작성하세요",
+    labelSender:"보내는 지갑 (TRX)",
+    labelReceiver:"받는 지갑 (BNB BSC)",
+    start:"스왑 시작하기",
+    sessionTitle:"입금 세션",
+    depositTo:"입금 주소 (고정)",
+    scanToDeposit:"입금용 QR 코드",
+    deadlineLabel:"입금 제한시간",
+    youCanCheck:"탐색기에서 확인하기:",
+    viewTrx:"Tronscan (보내는 지갑)",
+    viewBsc:"BscScan (받는 지갑)",
+    why:"왜 GasSwap을 사용하나요?",
+    whyList:[
+      "지갑 연결이 필요 없습니다",
+      "최저 스왑 수수료: 거래당 0.5 USDT 상당 토큰",
+      "간단한 절차: 보내고 받기만 하면 됩니다",
+      "블록체인 탐색기에서 즉시 확인 가능"
+    ],
+    how:"사용 방법",
+    howList:[
+      "보내는 지갑과 받는 지갑 주소를 정확히 입력하세요",
+      "표시된 입금 주소로 TRX를 전송하세요",
+      "네트워크 상황에 따라 약 5분 내 BNB가 자동 입금됩니다",
+      "자동 공격 및 투기성 스왑을 방지하기 위해 1~20 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다."
+    ],
+    notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
+    err_sender:"TRX 주소가 올바르지 않습니다.",
+    err_receiver:"BNB(BSC) 주소가 올바르지 않습니다."
+  },
+  ja: {
+    title:"TRX → BNB (BSC)",
+    subtitle:"TRXを入金すると、確認後にBNB(BSC)が自動送付されます。",
+    formTitle:"トークンを送る前にこのフォームを記入してください",
+    labelSender:"送信元 (TRX)",
+    labelReceiver:"受信先 (BNB BSC)",
+    start:"スワップ開始",
+    sessionTitle:"入金セッション",
+    depositTo:"入金先アドレス (固定)",
+    scanToDeposit:"入金用QRコード",
+    deadlineLabel:"入金期限",
+    youCanCheck:"エクスプローラーを確認:",
+    viewTrx:"Tronscan（送信元）",
+    viewBsc:"BscScan（受信先）",
+    why:"なぜGasSwapを使うのか？",
+    whyList:[
+      "ウォレット接続は不要",
+      "最安のクロススワップ手数料：取引ごとに0.5 USDT相当",
+      "シンプルな手順：送るだけでOK",
+      "ブロックチェーンエクスプローラーで即時確認可能"
+    ],
+    how:"使い方",
+    howList:[
+      "送信元と受信先のウォレットアドレスを正確に入力してください",
+      "表示された入金先アドレスにTRXを送信します",
+      "ネットワーク状況により約5分以内にBNBを自動受信します",
+      "自動攻撃や投機的なスワップを防ぐため、1～20 USDTの範囲外の取引は手数料を差し引いて自動返金されます。"
+    ],
+    notice:"⚠️ セキュリティのため、1 USDT未満または20 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
+    err_sender:"TRXアドレスが無効です。",
+    err_receiver:"BSCアドレスが無効です。"
+  },
+  zh: {
+    title:"TRX → BNB (BSC)",
+    subtitle:"入金 TRX，确认后自动收到 BNB (BSC)。",
+    formTitle:"请在发送代币前填写此表单",
+    labelSender:"发送地址 (TRX)",
+    labelReceiver:"接收地址 (BNB BSC)",
+    start:"开始兑换",
+    sessionTitle:"入金会话",
+    depositTo:"入金地址（固定）",
+    scanToDeposit:"扫描二维码入金",
+    deadlineLabel:"入金截止时间",
+    youCanCheck:"查看区块浏览器：",
+    viewTrx:"Tronscan（发送地址）",
+    viewBsc:"BscScan（接收地址）",
+    why:"为什么使用GasSwap？",
+    whyList:[
+      "无需连接钱包",
+      "最低跨链费用：每笔交易+0.5 USDT等值代币",
+      "操作简单：只需发送和接收",
+      "可在区块链浏览器上即时验证"
+    ],
+    how:"使用方法",
+    howList:[
+      "正确输入发送和接收钱包地址",
+      "向显示的存款地址发送TRX",
+      "通常5分钟内自动收到BNB（视网络情况而定）",
+      "为防止自动攻击和投机性交换，超出1–20 USDT范围的交易将自动退款（扣除处理费用）。"
+    ],
+    notice:"⚠️ 为了安全，请勿转入1 USDT以下或20 USDT以上金额。仅用于Gas的小额入金。",
+    err_sender:"无效的 TRX 地址",
+    err_receiver:"无效的 BSC 地址"
+  },
+  es: {
+    title:"TRX → BNB (BSC)",
+    subtitle:"Deposita TRX y recibe BNB (BSC) automáticamente tras la confirmación.",
+    formTitle:"Por favor completa este formulario antes de enviar tus tokens",
+    labelSender:"Remitente (TRX)",
+    labelReceiver:"Receptor (BNB BSC)",
+    start:"Iniciar intercambio",
+    sessionTitle:"Sesión de depósito",
+    depositTo:"Depositar en (dirección fija)",
+    scanToDeposit:"Escanear para depositar",
+    deadlineLabel:"Plazo de depósito",
+    youCanCheck:"Ver exploradores:",
+    viewTrx:"Tronscan (Remitente)",
+    viewBsc:"BscScan (Receptor)",
+    why:"¿Por qué usar GasSwap?",
+    whyList:[
+      "No necesitas conectar tu billetera",
+      "Tarifa más baja: +0.5 USDT equivalente por transacción",
+      "Proceso simple: solo envía y recibe",
+      "Verificación instantánea en exploradores blockchain"
+    ],
+    how:"Cómo usarlo",
+    howList:[
+      "Introduce correctamente las direcciones de remitente y receptor",
+      "Envía TRX a la dirección mostrada",
+      "Recibe BNB automáticamente (normalmente dentro de 5 minutos, según la red)",
+      "Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 1–20 USDT será reembolsada automáticamente (menos una tarifa de procesamiento)."
+    ],
+    notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 1 USDT o mayores a 20 USDT. Envía solo pequeñas cantidades con fines de gas.",
+    err_sender:"Dirección TRX inválida",
+    err_receiver:"Dirección BSC inválida"
+  }
+};
+
+// === 언어 자동감지 ===
+async function detectLang() {
+  try {
+    const r = await fetch("https://ipapi.co/json/");
+    const j = await r.json();
+    const c = (j.country_code || "").toUpperCase();
+    if (c === "KR") return "ko";
+    if (c === "JP") return "ja";
+    if (["CN","TW","HK","MO"].includes(c)) return "zh";
+    if (["ES","MX","AR","CO","CL","PE"].includes(c)) return "es";
+    return "en";
+  } catch {
+    return "en";
+  }
+}
+
+// === 언어 적용 ===
+function applyLang() {
+  const t = I18N[currentLang];
+  $("#title").textContent = t.title;
+  $("#subtitle").textContent = t.subtitle;
+  $("#formTitle").textContent = t.formTitle;
+  $("#labelSender").textContent = t.labelSender;
+  $("#labelReceiver").textContent = t.labelReceiver;
+  $("#startBtn").textContent = t.start;
+  $("#sessionTitle").textContent = t.sessionTitle;
+  $("#depositTo").textContent = t.depositTo;
+  $("#scanToDeposit").textContent = t.scanToDeposit;
+  $("#deadlineLabel").textContent = t.deadlineLabel;
+  $("#youCanCheck").textContent = t.youCanCheck;
+  $("#userTrxLink").textContent = t.viewTrx;
+  $("#userBscLink").textContent = t.viewBsc;
+  $("#noticeBox").textContent = t.notice;
+  document.querySelectorAll("h3.text-emerald-300")[0].textContent = t.why;
+  document.querySelectorAll("h3.text-emerald-300")[1].textContent = t.how;
+
+  // 리스트 번역
+  const whyItems = document.querySelectorAll(".list-disc li");
+  const howItems = document.querySelectorAll(".list-decimal li");
+  t.whyList.forEach((v, i) => (whyItems[i].textContent = v));
+  t.howList.forEach((v, i) => (howItems[i].textContent = v));
+}
+
+// === 국기 강조 ===
+function highlightFlag() {
+  document.querySelectorAll(".flag-btn").forEach(f =>
+    f.classList.toggle("flag-active", f.dataset.lang === currentLang)
+  );
+}
+
+// === QR 코드 생성 ===
 function makeQR(text) {
   $("#qr").innerHTML = "";
   new QRCode($("#qr"), { text, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
 }
 
-function showSession() {
-  $("#inactiveHint").classList.add("hidden");
-  $("#sessionPanel").classList.remove("hidden");
-  $("#depositAddress").textContent = CONFIG.SERVER_TRX;
-  makeQR(CONFIG.SERVER_TRX);
-  startCountdown(CONFIG.SESSION_SECONDS);
-  $("#userExplorers").classList.remove("hidden");
-}
-
+// === 카운트다운 ===
 function startCountdown(s) {
-  const el = $("#countdown");
-  const end = Date.now() + s * 1000;
+  const el = $("#countdown"), end = Date.now() + s * 1000;
+  el.style.textAlign = "right";
   const tick = () => {
     const r = Math.max(0, Math.floor((end - Date.now()) / 1000));
     const m = String(Math.floor(r / 60)).padStart(2, "0");
@@ -178,7 +385,17 @@ function startCountdown(s) {
   tick();
 }
 
-// ✅ forms2.json으로 변경
+// === 세션 표시 ===
+function showSession() {
+  $("#inactiveHint").classList.add("hidden");
+  $("#sessionPanel").classList.remove("hidden");
+  $("#depositAddress").textContent = CONFIG.SERVER_TRX;
+  makeQR(CONFIG.SERVER_TRX);
+  startCountdown(CONFIG.SESSION_SECONDS);
+  $("#userExplorers").classList.remove("hidden");
+}
+
+// === forms2.json 저장 ===
 async function updateForms(sender, receiver) {
   const repo = "GasSwap/gasswap-data";
   const path = "data/forms2.json";
@@ -188,38 +405,50 @@ async function updateForms(sender, receiver) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sender, receiver, repo, path, url })
   });
-  if (res.ok) alert("✅ Swap request saved to GitHub (forms2.json)!");
-  else alert("❌ Error: " + await res.text());
+  if (res.ok) console.log("✅ Swap saved to GitHub (forms2.json)");
+  else console.warn(await res.text());
 }
 
-// === FORM EVENT ===
-document.addEventListener("DOMContentLoaded", () => {
+// === 초기화 ===
+document.addEventListener("DOMContentLoaded", async () => {
   $("#year").textContent = new Date().getFullYear();
+  currentLang = await detectLang();
+  applyLang();
+  highlightFlag();
+
+  document.querySelectorAll(".flag-btn").forEach(f =>
+    f.addEventListener("click", () => {
+      currentLang = f.dataset.lang;
+      applyLang();
+      highlightFlag();
+    })
+  );
+
+  $("#copyDeposit").addEventListener("click", async ()=> {
+    const addr = $("#depositAddress").textContent.trim();
+    await navigator.clipboard.writeText(addr);
+    const btn = $("#copyDeposit");
+    const prev = btn.textContent;
+    btn.textContent = "Copied!";
+    btn.classList.add("border-emerald-500");
+    setTimeout(()=>{ btn.textContent = prev; btn.classList.remove("border-emerald-500"); }, 1500);
+  });
 
   $("#swapForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const sender = $("#sender").value.trim();
-    const receiver = $("#receiver").value.trim();
-    const err = $("#formError");
-    if (!isTRX(sender)) {
-      err.textContent = "Invalid TRX address";
-      err.classList.remove("hidden");
-      return;
-    }
-    if (!isEVM(receiver)) {
-      err.textContent = "Invalid BSC address";
-      err.classList.remove("hidden");
-      return;
-    }
+    const sender = $("#sender").value.trim(), receiver = $("#receiver").value.trim(), err = $("#formError");
+    if (!isTRX(sender)) { err.textContent = I18N[currentLang].err_sender; err.classList.remove("hidden"); return; }
+    if (!isEVM(receiver)) { err.textContent = I18N[currentLang].err_receiver; err.classList.remove("hidden"); return; }
     err.classList.add("hidden");
     $("#startBtn").disabled = true;
-    $("#startBtn").classList.add("opacity-50", "cursor-not-allowed");
+    $("#startBtn").classList.add("opacity-50","cursor-not-allowed");
     showSession();
     $("#userTrxLink").href = `https://tronscan.org/#/address/${sender}`;
     $("#userBscLink").href = `https://bscscan.com/address/${receiver}`;
     await updateForms(sender, receiver);
   });
 });
-</script>
+  </script>
 </body>
 </html>
+
