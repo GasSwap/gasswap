@@ -16,6 +16,7 @@
   </style>
 </head>
 <body class="min-h-screen bg-slate-950 text-slate-100">
+
   <!-- HEADER -->
   <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-20">
     <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -37,6 +38,7 @@
 
   <!-- MAIN -->
   <main class="max-w-5xl mx-auto px-4 py-8">
+
     <!-- Title -->
     <section class="rounded-2xl border border-slate-800 bg-slate-900 p-6 mb-6 text-center">
       <h2 id="title" class="text-2xl font-semibold mb-1">TRX → BNB (BSC)</h2>
@@ -46,7 +48,7 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <a href="index.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
+  <a href="bnb_trx.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
   <a href="trx_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">TRX → BNB</a>
   <button data-type="bnb-eth" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → ETH</button>
   <button data-type="eth-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">ETH → BNB</button>
@@ -54,104 +56,117 @@
   <button data-type="pol-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">POL → BNB</button>
 </section>
 
-    <!-- Form + Session -->
-    <section class="grid md:grid-cols-2 gap-6">
-      <!-- Left: Form -->
-      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 id="formTitle" class="text-lg font-semibold mb-4">Please fill this form before sending your tokens</h3>
-        <form id="swapForm" class="space-y-4" novalidate>
-          <div>
-            <label id="labelSender" class="block text-sm mb-1">Sender (TRX)</label>
-            <input id="sender" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="T..." required />
-          </div>
-          <div>
-            <label id="labelReceiver" class="block text-sm mb-1">Receiver (BNB BSC)</label>
-            <input id="receiver" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="0x…" required />
-          </div>
-          <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
-          <button id="startBtn" type="submit" class="w-full rounded-xl px-4 py-3 bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 focus:outline-none"> Start Swap </button>
-        </form>
+<!-- Form + Session -->
+<section class="grid md:grid-cols-2 gap-6">
+  <!-- Left: Form -->
+  <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+    <h3 id="formTitle" class="text-lg font-semibold mb-4">Please fill this form before sending your tokens</h3>
+    <form id="swapForm" class="space-y-4" novalidate>
+      <div>
+        <label id="labelSender" class="block text-sm mb-1">Sender (TRX)</label>
+        <input id="sender" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="T..." required />
+      </div>
+      <div>
+        <label id="labelReceiver" class="block text-sm mb-1">Receiver (BNB BSC)</label>
+        <input id="receiver" type="text" class="w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-400 px-4 py-3 text-sm" placeholder="0x…" required />
+      </div>
+      <div id="formError" class="hidden rounded-xl border border-red-500/40 bg-red-500/10 text-red-200 text-sm px-3 py-2"></div>
+      <button id="startBtn" type="submit" class="w-full rounded-xl px-4 py-3 bg-emerald-500 text-slate-950 font-semibold hover:bg-emerald-400 focus:outline-none"> Start Swap </button>
+    </form>
 
-        <!-- Wallet Links -->
-      <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2 w-[95%] mx-auto">
-          <div id="youCanCheck">Check Explorers:</div>
-          <div class="mt-1"> 🔗 <a id="userTrxLink" target="_blank" class="underline hover:text-emerald-300">Tronscan(Sender)</a> </div>
-          <div> 🔗 <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">BscScan(Receiver)</a> </div>
+    <!-- Wallet Links -->
+    <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2 w-[95%] mx-auto">
+      <div id="youCanCheck">Check Explorers:</div>
+      <div class="mt-1"> 🔗 <a id="userTrxLink" target="_blank" class="underline hover:text-emerald-300">Tronscan(Sender)</a> </div>
+      <div> 🔗 <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">BscScan(Receiver)</a> </div>
+    </div>
+  </div>
+
+  <!-- Right: Session -->
+  <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+    <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
+    <div id="inactiveHint" class="text-sm text-slate-400"> Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session. </div>
+    <div id="sessionPanel" class="hidden space-y-4">
+      <div>
+        <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
+        <div class="mt-1 flex items-center gap-2">
+          <code id="depositAddress" class="text-emerald-200 break-all"></code>
+          <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
         </div>
       </div>
-
-      <!-- Right: Session -->
-      <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-        <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
-        <div id="inactiveHint" class="text-sm text-slate-400"> Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session. </div>
-        <div id="sessionPanel" class="hidden space-y-4">
-          <div>
-            <div class="text-xs text-slate-400" id="depositTo">Deposit to (fixed address)</div>
-            <div class="mt-1 flex items-center gap-2">
-              <code id="depositAddress" class="text-emerald-200 break-all"></code>
-              <button id="copyDeposit" class="text-xs px-2 py-1 rounded-lg border border-slate-700 hover:bg-slate-800">Copy</button>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
-              <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
-             
-            <div>
-              <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
-              <div id="countdown" class="text-3xl font-mono mt-1">01:00:00</div>
-            </div>
-          </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
+          <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
+          <div id="countdown" class="text-3xl font-mono mt-1 text-right">59:59</div>
         </div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <!-- NOTICE -->
-    <section class="mt-8 text-center">
-      <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
-        ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.
-      </div>
-    </section>
+<!-- NOTICE -->
+<section class="mt-8 text-center">
+  <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
+    ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.
+  </div>
+</section>
 
-    <!-- INFO SECTION -->
-    <section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
-      <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
-        <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
-        <ul class="list-disc list-inside space-y-1">
-          <li>No need to connect your wallet</li>
-          <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
-          <li>Simple process: just send and receive</li>
-          <li>Instant verification on blockchain explorers</li>
-        </ul>
-        <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
-        <ol class="list-decimal list-inside space-y-1">
-          <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
-          <li>Send TRX to the displayed deposit address</li>
-          <li>Receive BNB automatically (usually within 5 minutes depending on network conditions)</li>
-          <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing).</li>
-        </ol>
+<!-- INFO SECTION -->
+<section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
+  <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
+    <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
+    <ul class="list-disc list-inside space-y-1">
+      <li>No need to connect your wallet</li>
+      <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
+      <li>Simple process: just send and receive</li>
+      <li>Instant verification on blockchain explorers</li>
+    </ul>
+    <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
+    <ol class="list-decimal list-inside space-y-1">
+      <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
+      <li>Send TRX to the displayed deposit address</li>
+      <li>Receive BNB automatically (usually within 5 minutes depending on network conditions)</li>
+      <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing).</li>
+    </ol>
+  </div>
+</section>
 
-      </div>
-    </section>
-  </main>
+</main>
 
-  <footer class="mt-10 py-10 text-center text-xs text-slate-500">
-    © <span id="year"></span> GasSwap
-  </footer>
+<!-- ✅ Modal (공통 팝업) -->
+<div id="swapModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-[90%] p-6 text-center relative">
+    <button id="closeModal" class="absolute top-2 right-3 text-slate-400 hover:text-emerald-400 text-xl">✕</button>
+    <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
+    <p id="modalDesc" class="text-slate-400 text-sm mb-4"></p>
+    <div class="text-xs text-slate-400 mb-2" id="modalDepositLabel"></div>
+    <code id="modalAddress" class="block text-emerald-300 break-all mb-3">0xDA1E8b362DDe013EA87Cf8984D64490c1900d231</code>
+    <button id="copyAddr" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-4">Copy Address</button>
+    <div id="modalQR" class="flex justify-center mb-4"></div>
+    <div id="explorerLinks" class="space-y-1 text-sm text-slate-400"></div>
+  </div>
+</div>
 
-  <script>
+<footer class="mt-10 py-10 text-center text-xs text-slate-500">
+  © <span id="year"></span> GasSwap
+</footer>
+
+
+<script>
+/* === 최소 변경 원칙: TRX↔BSC 방향 전환 + JSON 파일 경로만 === */
+
 const CONFIG = {
   FORM_ENDPOINT: "https://gasswap-proxy.workers.dev",
-  SERVER_TRX: "TDhFfK9nXvdp2kUq3pP7b3p7aYjV3kJb7T",
+  // ⚠️ 사용자가 제공한 그대로 둡니다 (주소 문자열도 변경하지 않음)
+  SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
   SESSION_SECONDS: 3600
 };
 
-const $ = s => document.querySelector(s);
-const isEVM = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
-const isTRX = a => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
-let currentLang = "en";
-
-// ✅ 다국어 번역 객체 (index.html과 동일 구조)
+/* 다국어 (TRX → BNB 문구로 구성) */
 const I18N = {
   en: {
     title:"TRX → BNB (BSC)",
@@ -196,9 +211,9 @@ const I18N = {
     depositTo:"입금 주소 (고정)",
     scanToDeposit:"입금용 QR 코드",
     deadlineLabel:"입금 제한시간",
-    youCanCheck:"탐색기에서 확인하기:",
-    viewTrx:"Tronscan (보내는 지갑)",
-    viewBsc:"BscScan (받는 지갑)",
+    youCanCheck: "탐색기에서 확인하기:",
+    viewTrx: "Tronscan (보내는 지갑)",
+    viewBsc: "BscScan (받는 지갑)",
     why:"왜 GasSwap을 사용하나요?",
     whyList:[
       "지갑 연결이 필요 없습니다",
@@ -228,9 +243,9 @@ const I18N = {
     depositTo:"入金先アドレス (固定)",
     scanToDeposit:"入金用QRコード",
     deadlineLabel:"入金期限",
-    youCanCheck:"エクスプローラーを確認:",
-    viewTrx:"Tronscan（送信元）",
-    viewBsc:"BscScan（受信先）",
+    youCanCheck: "エクスプローラーを確認:",
+    viewTrx: "Tronscan（送信元）",
+    viewBsc: "BscScan（受信先）",
     why:"なぜGasSwapを使うのか？",
     whyList:[
       "ウォレット接続は不要",
@@ -251,7 +266,7 @@ const I18N = {
   },
   zh: {
     title:"TRX → BNB (BSC)",
-    subtitle:"入金 TRX，确认后自动收到 BNB (BSC)。",
+    subtitle:"入金 TRX，确认后自动收到 BNB（BSC）。",
     formTitle:"请在发送代币前填写此表单",
     labelSender:"发送地址 (TRX)",
     labelReceiver:"接收地址 (BNB BSC)",
@@ -260,9 +275,9 @@ const I18N = {
     depositTo:"入金地址（固定）",
     scanToDeposit:"扫描二维码入金",
     deadlineLabel:"入金截止时间",
-    youCanCheck:"查看区块浏览器：",
-    viewTrx:"Tronscan（发送地址）",
-    viewBsc:"BscScan（接收地址）",
+    youCanCheck: "查看区块浏览器：",
+    viewTrx: "Tronscan（发送地址）",
+    viewBsc: "BscScan（接收地址）",
     why:"为什么使用GasSwap？",
     whyList:[
       "无需连接钱包",
@@ -292,9 +307,9 @@ const I18N = {
     depositTo:"Depositar en (dirección fija)",
     scanToDeposit:"Escanear para depositar",
     deadlineLabel:"Plazo de depósito",
-    youCanCheck:"Ver exploradores:",
-    viewTrx:"Tronscan (Remitente)",
-    viewBsc:"BscScan (Receptor)",
+    youCanCheck: "Ver exploradores:",
+    viewTrx: "Tronscan (Remitente)",
+    viewBsc: "BscScan (Receptor)",
     why:"¿Por qué usar GasSwap?",
     whyList:[
       "No necesitas conectar tu billetera",
@@ -315,7 +330,11 @@ const I18N = {
   }
 };
 
-// === 언어 자동감지 ===
+const $ = s => document.querySelector(s);
+const isEVM = a => /^0x[0-9a-fA-F]{40}$/.test(a || "");
+const isTRX = a => /^T[1-9A-HJ-NP-Za-km-z]{33}$/.test(a || "");
+let currentLang = "en";
+
 async function detectLang() {
   try {
     const r = await fetch("https://ipapi.co/json/");
@@ -331,7 +350,6 @@ async function detectLang() {
   }
 }
 
-// === 언어 적용 ===
 function applyLang() {
   const t = I18N[currentLang];
   $("#title").textContent = t.title;
@@ -345,72 +363,75 @@ function applyLang() {
   $("#scanToDeposit").textContent = t.scanToDeposit;
   $("#deadlineLabel").textContent = t.deadlineLabel;
   $("#youCanCheck").textContent = t.youCanCheck;
+  $("#noticeBox").textContent = t.notice;
   $("#userTrxLink").textContent = t.viewTrx;
   $("#userBscLink").textContent = t.viewBsc;
-  $("#noticeBox").textContent = t.notice;
-  document.querySelectorAll("h3.text-emerald-300")[0].textContent = t.why;
-  document.querySelectorAll("h3.text-emerald-300")[1].textContent = t.how;
+
+  // 섹션 헤더
+  const headers = document.querySelectorAll("h3.text-emerald-300");
+  if (headers[0]) headers[0].textContent = t.why;
+  if (headers[1]) headers[1].textContent = t.how;
 
   // 리스트 번역
   const whyItems = document.querySelectorAll(".list-disc li");
   const howItems = document.querySelectorAll(".list-decimal li");
-  t.whyList.forEach((v, i) => (whyItems[i].textContent = v));
-  t.howList.forEach((v, i) => (howItems[i].textContent = v));
+  if (t.whyList) whyItems.forEach((li, i) => t.whyList[i] && (li.textContent = t.whyList[i]));
+  if (t.howList) howItems.forEach((li, i) => t.howList[i] && (li.textContent = t.howList[i]));
 }
 
-// === 국기 강조 ===
 function highlightFlag() {
   document.querySelectorAll(".flag-btn").forEach(f =>
     f.classList.toggle("flag-active", f.dataset.lang === currentLang)
   );
 }
 
-// === QR 코드 생성 ===
-function makeQR(text) {
+function makeQR(text){
   $("#qr").innerHTML = "";
-  new QRCode($("#qr"), { text, width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M });
+  new QRCode($("#qr"), { text, width:160, height:160, correctLevel: QRCode.CorrectLevel.M });
 }
 
-// === 카운트다운 ===
-function startCountdown(s) {
-  const el = $("#countdown"), end = Date.now() + s * 1000;
-  el.style.textAlign = "right";
-  const tick = () => {
-    const r = Math.max(0, Math.floor((end - Date.now()) / 1000));
-    const m = String(Math.floor(r / 60)).padStart(2, "0");
-    const sec = String(r % 60).padStart(2, "0");
+function showSession(){
+  $("#inactiveHint").classList.add("hidden");
+  $("#sessionPanel").classList.remove("hidden");
+  // 주소 표시는 기존 변수 이름 유지(사용자 지시에 따라 다른 부분 변경하지 않음)
+  $("#depositAddress").textContent = CONFIG.SERVER_BSC;
+  makeQR(CONFIG.SERVER_BSC);
+  startCountdown(CONFIG.SESSION_SECONDS);
+
+  const explorers = $("#userExplorers");
+  if (explorers) explorers.classList.remove("hidden");
+}
+
+function startCountdown(s){
+  const el = $("#countdown");
+  const end = Date.now() + s * 1000;
+  const tick = ()=>{
+    const r = Math.max(0, Math.floor((end - Date.now())/1000));
+    const m = String(Math.floor(r/60)).padStart(2,"0");
+    const sec = String(r%60).padStart(2,"0");
     el.textContent = `${m}:${sec}`;
-    if (r > 0) setTimeout(tick, 1000);
+    if (r>0) setTimeout(tick, 1000);
   };
   tick();
 }
 
-// === 세션 표시 ===
-function showSession() {
-  $("#inactiveHint").classList.add("hidden");
-  $("#sessionPanel").classList.remove("hidden");
-  $("#depositAddress").textContent = CONFIG.SERVER_TRX;
-  makeQR(CONFIG.SERVER_TRX);
-  startCountdown(CONFIG.SESSION_SECONDS);
-  $("#userExplorers").classList.remove("hidden");
-}
-
-// === forms2.json 저장 ===
+/* === JSON 경로만 변경 (data/forms_trx_bnb.json) === */
 async function updateForms(sender, receiver) {
   const repo = "GasSwap/gasswap-data";
-  const path = "data/forms2.json";
-  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+  const path = "data/forms_trx_bnb.json"; // ← 여기만 바꿈
+  const url  = `https://api.github.com/repos/${repo}/contents/${path}`;
+
   const res = await fetch(CONFIG.FORM_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sender, receiver, repo, path, url })
   });
-  if (res.ok) console.log("✅ Swap saved to GitHub (forms2.json)");
-  else console.warn(await res.text());
+
+  if (res.ok) alert("✅ Swap request saved to GitHub!");
+  else alert("❌ Error: " + await res.text());
 }
 
-// === 초기화 ===
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", async ()=>{
   $("#year").textContent = new Date().getFullYear();
   currentLang = await detectLang();
   applyLang();
@@ -424,31 +445,192 @@ document.addEventListener("DOMContentLoaded", async () => {
     })
   );
 
-  $("#copyDeposit").addEventListener("click", async ()=> {
+  $("#copyDeposit").addEventListener("click", async ()=>{
     const addr = $("#depositAddress").textContent.trim();
-    await navigator.clipboard.writeText(addr);
     const btn = $("#copyDeposit");
-    const prev = btn.textContent;
-    btn.textContent = "Copied!";
-    btn.classList.add("border-emerald-500");
-    setTimeout(()=>{ btn.textContent = prev; btn.classList.remove("border-emerald-500"); }, 1500);
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(addr);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = addr; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      const prev = btn.textContent;
+      btn.textContent = "Copied!";
+      btn.classList.add("border-emerald-500");
+      setTimeout(()=>{ btn.textContent = prev; btn.classList.remove("border-emerald-500"); },1500);
+    } catch {
+      alert("Copy failed. Please copy manually.");
+    }
   });
 
-  $("#swapForm").addEventListener("submit", async e => {
+  // TRX(sender) / BSC(receiver) 검증으로 전환
+  $("#swapForm").addEventListener("submit", async e=>{
     e.preventDefault();
-    const sender = $("#sender").value.trim(), receiver = $("#receiver").value.trim(), err = $("#formError");
-    if (!isTRX(sender)) { err.textContent = I18N[currentLang].err_sender; err.classList.remove("hidden"); return; }
-    if (!isEVM(receiver)) { err.textContent = I18N[currentLang].err_receiver; err.classList.remove("hidden"); return; }
+    const sender = $("#sender").value.trim();
+    const receiver = $("#receiver").value.trim();
+    const err = $("#formError");
+    const t = I18N[currentLang];
+
+    if (!isTRX(sender))   { err.textContent = t.err_sender;   err.classList.remove("hidden"); return; }
+    if (!isEVM(receiver)) { err.textContent = t.err_receiver; err.classList.remove("hidden"); return; }
     err.classList.add("hidden");
+
     $("#startBtn").disabled = true;
     $("#startBtn").classList.add("opacity-50","cursor-not-allowed");
+
     showSession();
+    // 탐색기 링크도 TRX(sender) / BSC(receiver)로 전환
     $("#userTrxLink").href = `https://tronscan.org/#/address/${sender}`;
     $("#userBscLink").href = `https://bscscan.com/address/${receiver}`;
+
     await updateForms(sender, receiver);
   });
 });
-  </script>
+
+/* ===== 모달 (다른 스왑들 안내) : 기능 유지 ===== */
+const swapPairs = {
+  "bnb-eth": {
+    title: "BNB → ETH",
+    desc: {
+      en: "Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.",
+      ko: "아래 주소로 BNB(BSC)를 보내세요. 확인 후 동일한 주소로 ETH가 자동 반환됩니다.",
+      ja: "下記のアドレスにBNB(BSC)を送信してください。確認後、同じアドレスにETHが自動返送されます。",
+      zh: "请将BNB(BSC)发送至以下地址。确认后，同一地址将自动返回ETH。",
+      es: "Envía BNB (BSC) a la siguiente dirección. La misma dirección devolverá automáticamente ETH después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (BSC)",
+      ko: "입금 주소 (BSC)",
+      ja: "入金アドレス (BSC)",
+      zh: "入金地址（BSC）",
+      es: "Dirección de depósito (BSC)"
+    },
+    explorers: {
+      en: ["BscScan (Sender)", "Etherscan (Receiver)"],
+      ko: ["BscScan (보내는 지갑)", "Etherscan (받는 지갑)"],
+      ja: ["BscScan（送信元）", "Etherscan（受信先）"],
+      zh: ["BscScan（发送地址）", "Etherscan（接收地址）"],
+      es: ["BscScan (Remitente)", "Etherscan (Receptor)"]
+    },
+    urls: ["https://bscscan.com/address/","https://etherscan.io/address/"]
+  },
+  "eth-bnb": {
+    title: "ETH → BNB",
+    desc: {
+      en: "Send ETH to the address below. The same address will automatically return BNB after confirmation.",
+      ko: "아래 주소로 ETH를 보내세요. 확인 후 동일한 주소로 BNB가 자동 반환됩니다.",
+      ja: "下記のアドレスにETHを送信してください。確認後、同じアドレスにBNBが自動返送されます。",
+      zh: "请将ETH发送至以下地址。确认后，同一地址将自动返回BNB。",
+      es: "Envía ETH a la siguiente dirección. La misma dirección devolverá automáticamente BNB después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (ETH)",
+      ko: "입금 주소 (ETH)",
+      ja: "入金アドレス (ETH)",
+      zh: "入金地址（ETH）",
+      es: "Dirección de depósito (ETH)"
+    },
+    explorers: {
+      en: ["Etherscan (Sender)", "BscScan (Receiver)"],
+      ko: ["Etherscan (보내는 지갑)", "BscScan (받는 지갑)"],
+      ja: ["Etherscan（送信元）", "BscScan（受信先）"],
+      zh: ["Etherscan（发送地址）", "BscScan（接收地址）"],
+      es: ["Etherscan (Remitente)", "BscScan (Receptor)"]
+    },
+    urls: ["https://etherscan.io/address/","https://bscscan.com/address/"]
+  },
+  "bnb-pol": {
+    title: "BNB → POL",
+    desc: {
+      en: "Send BNB (BSC) to the address below. The same address will automatically return POL after confirmation.",
+      ko: "아래 주소로 BNB(BSC)를 보내세요. 확인 후 동일한 주소로 POL이 자동 반환됩니다.",
+      ja: "下記のアドレスにBNB(BSC)を送信してください。確認後、同じアドレスにPOLが自動返送されます。",
+      zh: "请将BNB(BSC)发送至以下地址。确认后，同一地址将自动返回POL。",
+      es: "Envía BNB (BSC) a la siguiente dirección. La misma dirección devolverá automáticamente POL después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (BSC)",
+      ko: "입금 주소 (BSC)",
+      ja: "入金アドレス (BSC)",
+      zh: "入金地址（BSC）",
+      es: "Dirección de depósito (BSC)"
+    },
+    explorers: {
+      en: ["BscScan (Sender)", "Polygonscan (Receiver)"],
+      ko: ["BscScan (보내는 지갑)", "Polygonscan (받는 지갑)"],
+      ja: ["BscScan（送信元）", "Polygonscan（受信先）"],
+      zh: ["BscScan（发送地址）", "Polygonscan（接收地址）"],
+      es: ["BscScan (Remitente)", "Polygonscan (Receptor)"]
+    },
+    urls: ["https://bscscan.com/address/","https://polygonscan.com/address/"]
+  },
+  "pol-bnb": {
+    title: "POL → BNB",
+    desc: {
+      en: "Send POL (Polygon) to the address below. The same address will automatically return BNB after confirmation.",
+      ko: "아래 주소로 POL(Polygon)을 보내세요. 확인 후 동일한 주소로 BNB가 자동 반환됩니다.",
+      ja: "下記のアドレスにPOL(Polygon)を送信してください。確認後、同じアドレスにBNBが自動返送されます。",
+      zh: "请将POL(Polygon)发送至以下地址。确认后，同一地址将自动返回BNB。",
+      es: "Envía POL (Polygon) a la siguiente dirección. La misma dirección devolverá automáticamente BNB después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (Polygon)",
+      ko: "입금 주소 (Polygon)",
+      ja: "入金アドレス (Polygon)",
+      zh: "入金地址（Polygon）",
+      es: "Dirección de depósito (Polygon)"
+    },
+    explorers: {
+      en: ["Polygonscan (Sender)", "BscScan (Receiver)"],
+      ko: ["Polygonscan (보내는 지갑)", "BscScan (받는 지갑)"],
+      ja: ["Polygonscan（送信元）", "BscScan（受信先）"],
+      zh: ["Polygonscan（发送地址）", "BscScan（接收地址）"],
+      es: ["Polygonscan (Remitente)", "BscScan (Receptor)"]
+    },
+    urls: ["https://polygonscan.com/address/","https://bscscan.com/address/"]
+  }
+};
+
+const depositAddress = CONFIG.SERVER_BSC; // 기존 변수 그대로 사용
+const modal = $("#swapModal"), qrDiv = $("#modalQR");
+
+document.querySelectorAll("button[data-type]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.dataset.type;
+    const data = swapPairs[type];
+    const lang = currentLang || "en";
+
+    $("#modalTitle").textContent = data.title;
+    $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
+    $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
+    $("#modalAddress").textContent = depositAddress;
+
+    $("#explorerLinks").innerHTML = `
+      🔗 <a href="${data.urls[0] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
+      🔗 <a href="${data.urls[1] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
+    `;
+
+    qrDiv.innerHTML = "";
+    new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
+    modal.classList.remove("hidden");
+  });
+});
+
+$("#closeModal").addEventListener("click", () => modal.classList.add("hidden"));
+modal.addEventListener("click", e => { if (e.target === modal) modal.classList.add("hidden"); });
+$("#copyAddr").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(depositAddress);
+  const b = $("#copyAddr");
+  const old = b.textContent;
+  b.textContent = "Copied!";
+  b.classList.add("border-emerald-500");
+  setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
+});
+</script>
+
 </body>
 </html>
 
