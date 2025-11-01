@@ -165,6 +165,13 @@ const CONFIG = {
   SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
   SESSION_SECONDS: 3600
 };
+  const depositAddresses = {
+  "trx-bnb": "TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1",   // TRX → BNB 입금주소 (TRON 주소)
+  "bnb-eth": "0x1111111111111111111111111111111111111111", // BNB → ETH
+  "eth-bnb": "0x2222222222222222222222222222222222222222", // ETH → BNB
+  "bnb-pol": "0x3333333333333333333333333333333333333333", // BNB → POL
+  "pol-bnb": "0x4444444444444444444444444444444444444444"  // POL → BNB
+};
 
 /* 다국어 (TRX → BNB 문구로 구성) */
 const I18N = {
@@ -393,9 +400,12 @@ function makeQR(text){
 function showSession(){
   $("#inactiveHint").classList.add("hidden");
   $("#sessionPanel").classList.remove("hidden");
-  // 주소 표시는 기존 변수 이름 유지(사용자 지시에 따라 다른 부분 변경하지 않음)
-  $("#depositAddress").textContent = CONFIG.SERVER_BSC;
-  makeQR(CONFIG.SERVER_BSC);
+
+  // ✅ TRX → BNB 페이지용 주소 적용
+  const address = depositAddresses["trx-bnb"];
+  $("#depositAddress").textContent = address;
+  makeQR(address);
+
   startCountdown(CONFIG.SESSION_SECONDS);
 
   const explorers = $("#userExplorers");
@@ -594,7 +604,7 @@ const swapPairs = {
   }
 };
 
-const depositAddress = CONFIG.SERVER_BSC; // 기존 변수 그대로 사용
+// ✅ 모달에서도 스왑쌍별 주소를 사용하도록 변경
 const modal = $("#swapModal"), qrDiv = $("#modalQR");
 
 document.querySelectorAll("button[data-type]").forEach(btn => {
@@ -606,13 +616,15 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
     $("#modalTitle").textContent = data.title;
     $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
     $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
-    $("#modalAddress").textContent = depositAddress;
+const address = depositAddresses[type];
+$("#modalAddress").textContent = address;
 
-    $("#explorerLinks").innerHTML = `
-      🔗 <a href="${data.urls[0] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
-      🔗 <a href="${data.urls[1] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
-    `;
+new QRCode(qrDiv, { text: address, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
 
+$("#explorerLinks").innerHTML = `
+  🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
+  🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
+`;
     qrDiv.innerHTML = "";
     new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
     modal.classList.remove("hidden");
