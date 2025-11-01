@@ -508,38 +508,114 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 const swapPairs = {
   "bnb-eth": {
     title: "BNB → ETH",
-    desc: "Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.",
-    label: "Deposit Address (BSC)",
-    explorers: [
-      { name: "BscScan (Sender)", url: "https://bscscan.com/address/" },
-      { name: "Etherscan (Receiver)", url: "https://etherscan.io/address/" }
+    desc: {
+      en: "Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.",
+      ko: "아래 주소로 BNB(BSC)를 보내세요. 확인 후 동일한 주소로 ETH가 자동 반환됩니다.",
+      ja: "下記のアドレスにBNB(BSC)を送信してください。確認後、同じアドレスにETHが自動返送されます。",
+      zh: "请将BNB(BSC)发送至以下地址。确认后，同一地址将自动返回ETH。",
+      es: "Envía BNB (BSC) a la siguiente dirección. La misma dirección devolverá automáticamente ETH después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (BSC)",
+      ko: "입금 주소 (BSC)",
+      ja: "入金アドレス (BSC)",
+      zh: "入金地址（BSC）",
+      es: "Dirección de depósito (BSC)"
+    },
+    explorers: {
+      en: ["BscScan (Sender)", "Etherscan (Receiver)"],
+      ko: ["BscScan (보내는 지갑)", "Etherscan (받는 지갑)"],
+      ja: ["BscScan（送信元）", "Etherscan（受信先）"],
+      zh: ["BscScan（发送地址）", "Etherscan（接收地址）"],
+      es: ["BscScan (Remitente)", "Etherscan (Receptor)"]
+    },
+    urls: [
+      "https://bscscan.com/address/",
+      "https://etherscan.io/address/"
     ]
   },
   "eth-bnb": {
     title: "ETH → BNB",
-    desc: "Send ETH to the address below. The same address will automatically return BNB after confirmation.",
-    label: "Deposit Address (ETH)",
-    explorers: [
-      { name: "Etherscan (Sender)", url: "https://etherscan.io/address/" },
-      { name: "BscScan (Receiver)", url: "https://bscscan.com/address/" }
+    desc: {
+      en: "Send ETH to the address below. The same address will automatically return BNB after confirmation.",
+      ko: "아래 주소로 ETH를 보내세요. 확인 후 동일한 주소로 BNB가 자동 반환됩니다.",
+      ja: "下記のアドレスにETHを送信してください。確認後、同じアドレスにBNBが自動返送されます。",
+      zh: "请将ETH发送至以下地址。确认后，同一地址将自动返回BNB。",
+      es: "Envía ETH a la siguiente dirección. La misma dirección devolverá automáticamente BNB después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (ETH)",
+      ko: "입금 주소 (ETH)",
+      ja: "入金アドレス (ETH)",
+      zh: "入金地址（ETH）",
+      es: "Dirección de depósito (ETH)"
+    },
+    explorers: {
+      en: ["Etherscan (Sender)", "BscScan (Receiver)"],
+      ko: ["Etherscan (보내는 지갑)", "BscScan (받는 지갑)"],
+      ja: ["Etherscan（送信元）", "BscScan（受信先）"],
+      zh: ["Etherscan（发送地址）", "BscScan（接收地址）"],
+      es: ["Etherscan (Remitente)", "BscScan (Receptor)"]
+    },
+    urls: [
+      "https://etherscan.io/address/",
+      "https://bscscan.com/address/"
     ]
   },
   "bnb-pol": {
     title: "BNB → POL",
-    desc: "Send BNB (BSC) to the address below. The same address will automatically return POL after confirmation.",
-    label: "Deposit Address (BSC)",
-    explorers: [
-      { name: "BscScan (Sender)", url: "https://bscscan.com/address/" },
-      { name: "Polygonscan (Receiver)", url: "https://polygonscan.com/address/" }
+    desc: {
+      en: "Send BNB (BSC) to the address below. The same address will automatically return POL after confirmation.",
+      ko: "아래 주소로 BNB(BSC)를 보내세요. 확인 후 동일한 주소로 POL이 자동 반환됩니다.",
+      ja: "下記のアドレスにBNB(BSC)を送信してください。確認後、同じアドレスにPOLが自動返送されます。",
+      zh: "请将BNB(BSC)发送至以下地址。确认后，同一地址将自动返回POL。",
+      es: "Envía BNB (BSC) a la siguiente dirección. La misma dirección devolverá automáticamente POL después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (BSC)",
+      ko: "입금 주소 (BSC)",
+      ja: "入金アドレス (BSC)",
+      zh: "入金地址（BSC）",
+      es: "Dirección de depósito (BSC)"
+    },
+    explorers: {
+      en: ["BscScan (Sender)", "Polygonscan (Receiver)"],
+      ko: ["BscScan (보내는 지갑)", "Polygonscan (받는 지갑)"],
+      ja: ["BscScan（送信元）", "Polygonscan（受信先）"],
+      zh: ["BscScan（发送地址）", "Polygonscan（接收地址）"],
+      es: ["BscScan (Remitente)", "Polygonscan (Receptor)"]
+    },
+    urls: [
+      "https://bscscan.com/address/",
+      "https://polygonscan.com/address/"
     ]
   },
   "pol-bnb": {
     title: "POL → BNB",
-    desc: "Send POL (Polygon) to the address below. The same address will automatically return BNB after confirmation.",
-    label: "Deposit Address (Polygon)",
-    explorers: [
-      { name: "Polygonscan (Sender)", url: "https://polygonscan.com/address/" },
-      { name: "BscScan (Receiver)", url: "https://bscscan.com/address/" }
+    desc: {
+      en: "Send POL (Polygon) to the address below. The same address will automatically return BNB after confirmation.",
+      ko: "아래 주소로 POL(Polygon)을 보내세요. 확인 후 동일한 주소로 BNB가 자동 반환됩니다.",
+      ja: "下記のアドレスにPOL(Polygon)を送信してください。確認後、同じアドレスにBNBが自動返送されます。",
+      zh: "请将POL(Polygon)发送至以下地址。确认后，同一地址将自动返回BNB。",
+      es: "Envía POL (Polygon) a la siguiente dirección. La misma dirección devolverá automáticamente BNB después de la confirmación."
+    },
+    label: {
+      en: "Deposit Address (Polygon)",
+      ko: "입금 주소 (Polygon)",
+      ja: "入金アドレス (Polygon)",
+      zh: "入金地址（Polygon）",
+      es: "Dirección de depósito (Polygon)"
+    },
+    explorers: {
+      en: ["Polygonscan (Sender)", "BscScan (Receiver)"],
+      ko: ["Polygonscan (보내는 지갑)", "BscScan (받는 지갑)"],
+      ja: ["Polygonscan（送信元）", "BscScan（受信先）"],
+      zh: ["Polygonscan（发送地址）", "BscScan（接收地址）"],
+      es: ["Polygonscan (Remitente)", "BscScan (Receptor)"]
+    },
+    urls: [
+      "https://polygonscan.com/address/",
+      "https://bscscan.com/address/"
     ]
   }
 };
@@ -551,13 +627,17 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.type;
     const data = swapPairs[type];
+    const lang = currentLang || "en"; // ✅ index에서 선택한 언어 그대로 사용
+
     $("#modalTitle").textContent = data.title;
-    $("#modalDesc").textContent = data.desc;
-    $("#modalDepositLabel").textContent = data.label;
+    $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
+    $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
     $("#modalAddress").textContent = depositAddress;
-    $("#explorerLinks").innerHTML = data.explorers
-      .map(e => `🔗 <a href="${e.url + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${e.name}</a>`)
-      .join("<br>");
+    $("#explorerLinks").innerHTML = `
+      🔗 <a href="${data.urls[0] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
+      🔗 <a href="${data.urls[1] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
+    `;
+
     qrDiv.innerHTML = "";
     new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
     modal.classList.remove("hidden");
@@ -566,7 +646,6 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
 
 $("#closeModal").addEventListener("click", () => modal.classList.add("hidden"));
 modal.addEventListener("click", e => { if (e.target === modal) modal.classList.add("hidden"); });
-
 $("#copyAddr").addEventListener("click", async () => {
   await navigator.clipboard.writeText(depositAddress);
   const b = $("#copyAddr");
@@ -575,6 +654,7 @@ $("#copyAddr").addEventListener("click", async () => {
   b.classList.add("border-emerald-500");
   setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
 });
+
 
   </script>
 </body>
