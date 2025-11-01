@@ -99,8 +99,7 @@
             <div>
               <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
               <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
-              <div id="sessionExplorers" class="hidden mt-4 p-3 rounded-xl border border-slate-800 bg-slate-950"></div>
-            </div>
+             
             <div>
               <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
               <div id="countdown" class="text-3xl font-mono mt-1">01:00:00</div>
@@ -404,23 +403,23 @@ function showSession(){
   makeQR(CONFIG.SERVER_BSC);
   startCountdown(CONFIG.SESSION_SECONDS);
 
+  // ✅ 탐색기 링크를 바로 표시 (상위 레벨로 이동)
   const explorers = $("#userExplorers");
-  const holder = $("#sessionExplorers");
-  if (explorers && holder) {
-    holder.appendChild(explorers);
+  if (explorers) {
     explorers.classList.remove("hidden");
-    holder.classList.remove("hidden");
+    explorers.style.marginTop = "12px";
   }
 }
 
 function startCountdown(s){
-  const el=$("#countdown"),end=Date.now()+s*1000;
+  const el=$("#countdown"), end=Date.now()+s*1000;
+  el.style.textAlign="right"; // ✅ 오른쪽 정렬 추가
+
   const tick=()=>{
     const r=Math.max(0,Math.floor((end-Date.now())/1000));
-    const h=String(Math.floor(r/3600)).padStart(2,"0"),
-          m=String(Math.floor((r%3600)/60)).padStart(2,"0"),
-          sec=String(r%60).padStart(2,"0");
-    el.textContent=`${h}:${m}:${sec}`;
+    const m=String(Math.floor(r/60)).padStart(2,"0");
+    const sec=String(r%60).padStart(2,"0");
+    el.textContent=`${m}:${sec}`; // ✅ mm:ss 형식으로 표시
     if(r>0) setTimeout(tick,1000);
   };
   tick();
