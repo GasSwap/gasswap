@@ -83,7 +83,7 @@
           </button>
         </form>
 
-        <!-- Wallet Links -->
+        <!-- Wallet Links (초기에는 여기 존재하지만, 세션 시작 시 오른쪽 패널로 이동시킵니다) -->
         <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2">
           <div id="youCanCheck">You can verify your wallets on explorers:</div>
           <div class="mt-1">
@@ -115,6 +115,9 @@
             <div>
               <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
               <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
+
+              <!-- 여기로 탐색기 링크가 이동되어 표시됩니다 -->
+              <div id="sessionExplorers" class="hidden mt-4 p-3 rounded-xl border border-slate-800 bg-slate-950"></div>
             </div>
             <div>
               <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
@@ -130,6 +133,30 @@
       <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
         ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted.  
         Please send only small amounts for gas purposes.
+      </div>
+    </section>
+    <!-- INFO SECTION -->
+    <section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
+      <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
+        <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
+        <ul class="list-disc list-inside space-y-1">
+          <li>No need to connect your wallet</li>
+          <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
+          <li>Simple process: just send and receive</li>
+          <li>Instant verification on blockchain explorers</li>
+        </ul>
+
+        <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
+        <ol class="list-decimal list-inside space-y-1">
+          <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
+          <li>Send BNB to the displayed deposit address</li>
+          <li>Receive TRX automatically (usually within 5 minutes depending on network conditions)</li>
+        </ol>
+
+        <p class="mt-6 text-yellow-200 text-[13px] border-t border-emerald-700/50 pt-3">
+          ⚠️ To prevent automated attacks and speculative swaps, any transaction value 
+          outside the range of <b>1 – 20 USDT</b> will be automatically refunded (minus a small fee for processing).
+        </p>
       </div>
     </section>
   </main>
@@ -261,8 +288,35 @@
     }
 
     function makeQR(text){$("#qr").innerHTML=""; new QRCode($("#qr"),{text,width:160,height:160,correctLevel:QRCode.CorrectLevel.M});}
-    function showSession(){ $("#inactiveHint").classList.add("hidden"); $("#sessionPanel").classList.remove("hidden"); $("#depositAddress").textContent=CONFIG.SERVER_BSC; makeQR(CONFIG.SERVER_BSC); startCountdown(CONFIG.SESSION_SECONDS); }
-    function startCountdown(s){const el=$("#countdown"),end=Date.now()+s*1000;const tick=()=>{const r=Math.max(0,Math.floor((end-Date.now())/1000));const h=String(Math.floor(r/3600)).padStart(2,"0"),m=String(Math.floor((r%3600)/60)).padStart(2,"0"),sec=String(r%60).padStart(2,"0");el.textContent=`${h}:${m}:${sec}`;if(r>0)setTimeout(tick,1000);};tick();}
+    function showSession(){
+      $("#inactiveHint").classList.add("hidden");
+      $("#sessionPanel").classList.remove("hidden");
+      $("#depositAddress").textContent=CONFIG.SERVER_BSC;
+      makeQR(CONFIG.SERVER_BSC);
+      startCountdown(CONFIG.SESSION_SECONDS);
+
+      // 탐색기 링크 블록을 세션의 QR 옆으로 이동
+      const explorers = $("#userExplorers");
+      const holder = $("#sessionExplorers");
+      if (explorers && holder) {
+        holder.appendChild(explorers);
+        explorers.classList.remove("hidden");
+        holder.classList.remove("hidden");
+      }
+    }
+
+    function startCountdown(s){
+      const el=$("#countdown"),end=Date.now()+s*1000;
+      const tick=()=>{
+        const r=Math.max(0,Math.floor((end-Date.now())/1000));
+        const h=String(Math.floor(r/3600)).padStart(2,"0"),
+              m=String(Math.floor((r%3600)/60)).padStart(2,"0"),
+              sec=String(r%60).padStart(2,"0");
+        el.textContent=`${h}:${m}:${sec}`;
+        if(r>0) setTimeout(tick,1000);
+      };
+      tick();
+    }
 
     async function updateForms(sender, receiver) {
       const res = await fetch(CONFIG.FORM_ENDPOINT, {
@@ -281,6 +335,27 @@
 
       document.querySelectorAll(".flag-btn").forEach(f => f.addEventListener("click", () => { currentLang = f.dataset.lang; applyLang(); highlightFlag(); }));
 
+      // COPY 버튼 동작 추가
+      $("#copyDeposit").addEventListener("click", async ()=>{
+        const addr = $("#depositAddress").textContent.trim();
+        const btn = $("#copyDeposit");
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(addr);
+          } else {
+            const ta = document.createElement("textarea");
+            ta.value = addr; document.body.appendChild(ta);
+            ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+          }
+          const prev = btn.textContent;
+          btn.textContent = "Copied!";
+          btn.classList.add("border-emerald-500");
+          setTimeout(()=>{ btn.textContent = prev; btn.classList.remove("border-emerald-500"); },1500);
+        } catch(e){
+          alert("Copy failed. Please copy manually.");
+        }
+      });
+
       $("#swapForm").addEventListener("submit", async e=>{
         e.preventDefault();
         const sender=$("#sender").value.trim(), receiver=$("#receiver").value.trim(), err=$("#formError");
@@ -289,7 +364,7 @@
         err.classList.add("hidden");
         $("#startBtn").disabled=true;$("#startBtn").classList.add("opacity-50","cursor-not-allowed");
         showSession();
-        $("#userExplorers").classList.remove("hidden");
+        // 유저 주소 기반 탐색기 링크 설정
         $("#userBscLink").href=`https://bscscan.com/address/${sender}`;
         $("#userTrxLink").href=`https://tronscan.org/#/address/${receiver}`;
         await updateForms(sender,receiver);
