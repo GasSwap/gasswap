@@ -243,8 +243,7 @@ function render(){
       <h3 class="text-sm mt-4 mb-1">${t.formTitle}</h3>
       <input placeholder="${t.labelSender}" class="w-full bg-slate-800 p-2 rounded mb-2 text-sm" />
       <input placeholder="${t.labelReceiver}" class="w-full bg-slate-800 p-2 rounded mb-4 text-sm" />
-      <button id="swapStart" class="bg-emerald-500 px-4 py-2 rounded-lg text-black font-semibold">${t.start}</button>
-
+      <button class="bg-emerald-500 px-4 py-2 rounded-lg text-black font-semibold">${t.start}</button>
     `;
   } else {
     // --- 단순 입금형
@@ -294,40 +293,5 @@ document.querySelectorAll(".flag-btn").forEach(btn=>{
 $("#year").textContent=new Date().getFullYear();
 render();
 </script>
-<script>
-document.addEventListener("click", async (e) => {
-  if (e.target && e.target.id === "swapStart") {
-    const sender = document.querySelector('input[placeholder*="Sender"]').value.trim();
-    const receiver = document.querySelector('input[placeholder*="Receiver"]').value.trim();
-
-    if (!sender || !receiver) {
-      alert("Please fill both sender and receiver addresses.");
-      return;
-    }
-
-    const payload = { sender, receiver };
-    console.log("Sending to Cloudflare Worker:", payload);
-
-    try {
-      const res = await fetch("https://gasswap-proxy.workers.dev", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!res.ok) throw new Error("Worker returned error: " + res.status);
-      const result = await res.json();
-      console.log(result);
-
-      alert("✅ Form submitted successfully!");
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to send form. Check console for details.");
-    }
-  }
-});
-</script>
-
-
 </body>
 </html>
