@@ -407,15 +407,30 @@ function startCountdown(s){
   tick();
 }
 
+// ✅ 수정된 updateForms 함수
 async function updateForms(sender, receiver) {
+  // GitHub API 경로
+  const repo = "GasSwap/gasswap-data";
+  const path = "data/forms.json";
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+
+  // Cloudflare Worker가 토큰을 대신 사용
   const res = await fetch(CONFIG.FORM_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sender, receiver })
+    body: JSON.stringify({
+      sender,
+      receiver,
+      repo,
+      path,
+      url
+    })
   });
-  if (res.ok) alert("✅ Swap request saved!");
+
+  if (res.ok) alert("✅ Swap request saved to GitHub!");
   else alert("❌ Error: " + await res.text());
 }
+
 
 document.addEventListener("DOMContentLoaded", async ()=>{
   $("#year").textContent = new Date().getFullYear();
