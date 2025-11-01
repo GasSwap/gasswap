@@ -346,9 +346,27 @@ function applyLang() {
   $("#youCanCheck").textContent = t.youCanCheck;
   $("#noticeBox").textContent = t.notice;
   $("#inactiveHint").textContent = t.hint;
-  $("#userBscLink").textContent = t.viewBsc;   // BscScan 링크
-  $("#userTrxLink").textContent = t.viewTrx;   // Tronscan 링크
-  document.querySelector("h3.text-emerald-300").textContent = t.why; // "Why Use GasSwap?"
+  $("#userBscLink").textContent = t.viewBsc;
+  $("#userTrxLink").textContent = t.viewTrx;
+  document.querySelector("h3.text-emerald-300").textContent = t.why;
+  document.querySelectorAll("h3.text-emerald-300")[1].textContent = t.how;
+
+  // ✅ 추가: Why / How 리스트 번역
+  const whyItems = document.querySelectorAll(".list-disc li");
+  const howItems = document.querySelectorAll(".list-decimal li");
+
+  if (t.whyList) {
+    whyItems.forEach((li, i) => {
+      if (t.whyList[i]) li.textContent = t.whyList[i];
+    });
+  }
+
+  if (t.howList) {
+    howItems.forEach((li, i) => {
+      if (t.howList[i]) li.textContent = t.howList[i];
+    });
+  }
+}
 }
 
 function highlightFlag() {
