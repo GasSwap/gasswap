@@ -619,7 +619,12 @@ const swapPairs = {
   }
 };
 
-const depositAddress = "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231";
+const depositAddresses = {
+  "bnb-eth": "0x1111111111111111111111111111111111111111", // 🔹 BNB → ETH 입금주소
+  "eth-bnb": "0x2222222222222222222222222222222222222222", // 🔹 ETH → BNB 입금주소
+  "bnb-pol": "0x3333333333333333333333333333333333333333", // 🔹 BNB → POL 입금주소
+  "pol-bnb": "0x4444444444444444444444444444444444444444"  // 🔹 POL → BNB 입금주소
+};
 const modal = $("#swapModal"), qrDiv = $("#modalQR");
 
 document.querySelectorAll("button[data-type]").forEach(btn => {
@@ -631,12 +636,14 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
     $("#modalTitle").textContent = data.title;
     $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
     $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
-    $("#modalAddress").textContent = depositAddress;
-    $("#explorerLinks").innerHTML = `
-      🔗 <a href="${data.urls[0] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
-      🔗 <a href="${data.urls[1] + depositAddress}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
-    `;
+const address = depositAddresses[type]; // 스왑쌍별 주소 가져오기
+$("#modalAddress").textContent = address;
+new QRCode(qrDiv, { text: address, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
 
+$("#explorerLinks").innerHTML = `
+  🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
+  🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
+`;
     qrDiv.innerHTML = "";
     new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
     modal.classList.remove("hidden");
