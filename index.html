@@ -83,8 +83,8 @@
           </button>
         </form>
 
-        <!-- Wallet Links (초기에는 여기 존재하지만, 세션 시작 시 오른쪽 패널로 이동시킵니다) -->
-        <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2">
+        <!-- ✅ verifiy wallets box width widened -->
+        <div id="userExplorers" class="hidden mt-5 text-sm text-slate-400 space-y-2 w-full block">
           <div id="youCanCheck">You can verify your wallets on explorers:</div>
           <div class="mt-1">
             🔗 <a id="userBscLink" target="_blank" class="underline hover:text-emerald-300">View on BscScan (Sender)</a>
@@ -116,8 +116,7 @@
               <div id="qr" class="bg-white p-2 inline-block rounded-xl"></div>
               <div class="text-[10px] text-slate-500 mt-1" id="scanToDeposit">Scan to deposit</div>
 
-              <!-- 여기로 탐색기 링크가 이동되어 표시됩니다 -->
-              <div id="sessionExplorers" class="hidden mt-4 p-3 rounded-xl border border-slate-800 bg-slate-950"></div>
+              <div id="sessionExplorers" class="hidden mt-4 p-3 rounded-xl border border-slate-800 bg-slate-950 w-full"></div>
             </div>
             <div>
               <div class="text-xs text-slate-400" id="deadlineLabel">Deposit deadline</div>
@@ -135,9 +134,10 @@
         Please send only small amounts for gas purposes.
       </div>
     </section>
-    <!-- INFO SECTION -->
-    <section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed">
-      <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100">
+
+    <!-- ✅ Emerald box width widened -->
+    <section class="mt-10 max-w-3xl mx-auto text-sm leading-relaxed w-full">
+      <div class="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-6 text-emerald-100 w-full">
         <h3 class="text-lg font-semibold mb-3 text-center text-emerald-300">Why Use GasSwap?</h3>
         <ul class="list-disc list-inside space-y-1">
           <li>No need to connect your wallet</li>
