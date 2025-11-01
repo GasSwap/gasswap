@@ -178,8 +178,7 @@ const I18N = {
     warning:"⚠️ To prevent automated attacks and speculative swaps, any transaction value outside the range of 1–20 USDT will be automatically refunded (minus a small fee for processing).",
     notice:"⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.",
     err_sender:"Invalid BSC address",
-    err_receiver:"Invalid TRX address",
-    hint:"Fill the form and press Start Swap to generate your session."
+    err_receiver:"Invalid TRX address"
   },
   ko: {
     title:"BNB (BSC) → TRX",
@@ -211,8 +210,7 @@ const I18N = {
     warning:"⚠️ 자동 공격 및 투기성 스왑을 방지하기 위해 1~20 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다.",
     notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
     err_sender:"BNB(BSC) 주소가 올바르지 않습니다.",
-    err_receiver:"TRX 주소가 올바르지 않습니다.",
-    hint:"폼을 작성하고 ‘스왑 시작하기’를 눌러 세션을 생성하세요."
+    err_receiver:"TRX 주소가 올바르지 않습니다."
   },
   ja: {
     title:"BNB (BSC) → TRX",
@@ -244,8 +242,7 @@ const I18N = {
     warning:"⚠️ 自動攻撃や投機的なスワップを防ぐため、1～20 USDTの範囲外の取引は手数料を差し引いて自動返金されます。",
     notice:"⚠️ セキュリティのため、1 USDT未満または20 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
     err_sender:"BSCアドレスが無効です。",
-    err_receiver:"TRXアドレスが無効です。",
-    hint:"フォームに入力し、「スワップ開始」を押してセッションを生成してください。"
+    err_receiver:"TRXアドレスが無効です。"
   },
   zh: {
     title:"BNB (BSC) → TRX",
@@ -277,8 +274,7 @@ const I18N = {
     warning:"⚠️ 为防止自动攻击和投机性交换，超出1–20 USDT范围的交易将自动退款（扣除少量手续费）。",
     notice:"⚠️ 为了安全，请勿转入1 USDT以下或20 USDT以上金额。仅用于Gas的小额入金。",
     err_sender:"无效的 BSC 地址",
-    err_receiver:"无效的 TRX 地址",
-    hint:"填写表单并点击“开始兑换”以生成您的会话。"
+    err_receiver:"无效的 TRX 地址"
   },
   es: {
     title:"BNB (BSC) → TRX",
@@ -310,8 +306,7 @@ const I18N = {
     warning:"⚠️ Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 1–20 USDT será reembolsada automáticamente (menos una pequeña tarifa de procesamiento).",
     notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 1 USDT o mayores a 20 USDT. Envía solo pequeñas cantidades con fines de gas.",
     err_sender:"Dirección BSC inválida",
-    err_receiver:"Dirección TRX inválida",
-    hint:"Completa el formulario y presiona ‘Iniciar intercambio’ para generar tu sesión."
+    err_receiver:"Dirección TRX inválida"
   }
 };
 
@@ -350,6 +345,10 @@ function applyLang() {
   $("#deadlineLabel").textContent = t.deadlineLabel;
   $("#youCanCheck").textContent = t.youCanCheck;
   $("#noticeBox").textContent = t.notice;
+  $("#inactiveHint").textContent = t.hint;
+  $("#userBscLink").textContent = t.viewBsc;   // BscScan 링크
+  $("#userTrxLink").textContent = t.viewTrx;   // Tronscan 링크
+  document.querySelector("h3.text-emerald-300").textContent = t.why; // "Why Use GasSwap?"
 }
 
 function highlightFlag() {
