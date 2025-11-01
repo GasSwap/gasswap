@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GasSwap – BNB → ETH</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>a{word-break:break-all}</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <main class="max-w-3xl mx-auto px-4 py-10 text-center">
+    <h1 id="title" class="text-2xl font-bold mb-4">BNB → ETH</h1>
+    <p id="desc" class="text-slate-400 mb-6">Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.</p>
+
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div id="depositLabel" class="text-sm text-slate-400 mb-2">Deposit Address (BSC)</div>
+      <code id="depositAddress" class="block text-emerald-300 break-all mb-4">0xDA1E8b362DDe013EA87Cf8984D64490c1900d231</code>
+
+      <button id="copyBtn" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-6">Copy Address</button>
+      <div id="qr" class="flex justify-center mb-6"></div>
+
+      <div class="space-y-2 text-sm text-slate-400">
+        <div id="checkText">Check Explorers:</div>
+        <div>🔗 <a id="bscLink" href="https://bscscan.com/address/0xDA1E8b362DDe013EA87Cf8984D64490c1900d231" target="_blank" class="underline hover:text-emerald-300">BscScan (Sender)</a></div>
+        <div>🔗 <a id="ethLink" href="https://etherscan.io/address/0xDA1E8b362DDe013EA87Cf8984D64490c1900d231" target="_blank" class="underline hover:text-emerald-300">Etherscan (Receiver)</a></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+  const I18N={
+    en:{desc:"Send BNB (BSC) to the address below. The same address will automatically return ETH after confirmation.",depositLabel:"Deposit Address (BSC)",checkText:"Check Explorers:",bsc:"BscScan (Sender)",eth:"Etherscan (Receiver)"},
+    ko:{desc:"아래 주소로 BNB(BSC)를 보내세요. 확인 후 동일한 주소로 ETH가 자동 반환됩니다.",depositLabel:"입금 주소 (BSC)",checkText:"탐색기에서 확인하기:",bsc:"BscScan (보내는 지갑)",eth:"Etherscan (받는 지갑)"},
+    ja:{desc:"下記のアドレスにBNB(BSC)を送信してください。確認後、同じアドレスにETHが自動返送されます。",depositLabel:"入金アドレス (BSC)",checkText:"エクスプローラーを確認:",bsc:"BscScan（送信元）",eth:"Etherscan（受信先）"},
+    zh:{desc:"请将BNB(BSC)发送至以下地址。确认后，同一地址将自动返回ETH。",depositLabel:"入金地址（BSC）",checkText:"查看区块浏览器：",bsc:"BscScan（发送地址）",eth:"Etherscan（接收地址）"},
+    es:{desc:"Envía BNB (BSC) a la siguiente dirección. La misma dirección devolverá automáticamente ETH después de la confirmación.",depositLabel:"Dirección de depósito (BSC)",checkText:"Ver exploradores:",bsc:"BscScan (Remitente)",eth:"Etherscan (Receptor)"}
+  };
+  async function detectLang(){
+    try{const r=await fetch("https://ipapi.co/json/");const j=await r.json();const c=(j.country_code||"").toUpperCase();
+    if(c==="KR")return"ko";if(c==="JP")return"ja";if(["CN","TW","HK","MO"].includes(c))return"zh";if(["ES","MX","AR","CO","CL","PE"].includes(c))return"es";return"en";}
+    catch{return"en";}
+  }
+  document.addEventListener("DOMContentLoaded",async()=>{
+    const lang=await detectLang(),t=I18N[lang];
+    document.getElementById("desc").textContent=t.desc;
+    document.getElementById("depositLabel").textContent=t.depositLabel;
+    document.getElementById("checkText").textContent=t.checkText;
+    document.getElementById("bscLink").textContent=t.bsc;
+    document.getElementById("ethLink").textContent=t.eth;
+    new QRCode(document.getElementById("qr"),{text:document.getElementById("depositAddress").textContent.trim(),width:160,height:160,correctLevel:QRCode.CorrectLevel.M});
+    document.getElementById("copyBtn").addEventListener("click",async()=>{
+      const addr=document.getElementById("depositAddress").textContent.trim();await navigator.clipboard.writeText(addr);
+      const b=document.getElementById("copyBtn");const old=b.textContent;b.textContent="Copied!";b.classList.add("border-emerald-500");setTimeout(()=>{b.textContent=old;b.classList.remove("border-emerald-500");},1500);
+    });
+  });
+  </script>
+</body>
+</html>
