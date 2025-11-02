@@ -148,6 +148,7 @@
     <button id="copyAddr" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-4">Copy Address</button>
     <div id="modalQR" class="flex justify-center mb-4"></div>
     <div id="explorerLinks" class="space-y-1 text-sm text-slate-400"></div>
+    <div id="bnbEthNotice" class="hidden text-xs text-yellow-400 mt-3 leading-relaxed"></div>
   </div>
 </div>
 
@@ -625,6 +626,21 @@ $("#explorerLinks").innerHTML = `
   🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
   🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
 `;
+// === 추가: BNB→ETH 수수료 안내문 ===
+const noticeDiv = $("#bnbEthNotice");
+if (type === "bnb-eth") {
+  const feeTexts = {
+    en: "⚠️ Normal fee is $0.5. If ETH gas fee spikes, up to $1 may be charged. If the total exceeds $1, your full BNB will be refunded.",
+    ko: "⚠️ 평상시 수수료는 $0.5이나, ETH 전송 수수료가 급등할 경우 최대 $1까지만 부과되며, 전송 수수료가 $1를 초과하면 BNB로 전액 반환됩니다.",
+    ja: "⚠️ 通常の手数料は$0.5ですが、ETHの送金手数料が高騰した場合は最大$1まで請求されます。合計が$1を超える場合はBNBが全額返金されます。",
+    zh: "⚠️ 平常手续费为$0.5。如ETH转账手续费激增，最高收取$1。若超过$1，将全额退回BNB。",
+    es: "⚠️ La tarifa normal es de $0.5. Si la tarifa de gas de ETH sube, se cobrará hasta $1. Si excede $1, se reembolsará el BNB completo."
+  };
+  noticeDiv.textContent = feeTexts[lang] || feeTexts.en;
+  noticeDiv.classList.remove("hidden");
+} else {
+  noticeDiv.classList.add("hidden");
+}
     qrDiv.innerHTML = "";
     new QRCode(qrDiv, { text: depositAddress, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
     modal.classList.remove("hidden");
@@ -645,4 +661,3 @@ $("#copyAddr").addEventListener("click", async () => {
 
 </body>
 </html>
-
