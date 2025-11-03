@@ -465,23 +465,30 @@ async function updateForms(sender, receiver) {
 }
 
 
-document.addEventListener("DOMContentLoaded", async ()=>{
+document.addEventListener("DOMContentLoaded", async () => {
+  // ① 기본 연도
   $("#year").textContent = new Date().getFullYear();
+
+  // ② 언어 자동 감지 → 적용
   currentLang = await detectLang();
   applyLang();
   highlightFlag();
 
-  document.querySelectorAll(".flag-btn").forEach(f =>
+  // ③ 언어 버튼 클릭 시 갱신
+  document.querySelectorAll(".flag-btn").forEach(f => {
     f.addEventListener("click", () => {
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
-setTimeout(updateTokenRange, 200);
-    })
-setTimeout(updateTokenRange, 300);
-  );
+      setTimeout(updateTokenRange, 200); // 언어 바뀐 후 가격 갱신
+    });
+  });
 
-  $("#copyDeposit").addEventListener("click", async ()=>{
+  // ④ 페이지 로드 후 0.3초 뒤 가격 표시 (언어 반영 완료 후)
+  setTimeout(updateTokenRange, 300);
+
+  // ⑤ 복사 버튼
+  $("#copyDeposit").addEventListener("click", async () => {
     const addr = $("#depositAddress").textContent.trim();
     const btn = $("#copyDeposit");
     try {
@@ -498,28 +505,44 @@ setTimeout(updateTokenRange, 300);
       const prev = btn.textContent;
       btn.textContent = "Copied!";
       btn.classList.add("border-emerald-500");
-      setTimeout(()=>{
+      setTimeout(() => {
         btn.textContent = prev;
         btn.classList.remove("border-emerald-500");
-      },1500);
-    } catch(e){
+      }, 1500);
+    } catch (e) {
       alert("Copy failed. Please copy manually.");
     }
   });
 
-  $("#swapForm").addEventListener("submit", async e=>{
+  // ⑥ 폼 제출 이벤트
+  $("#swapForm").addEventListener("submit", async e => {
     e.preventDefault();
-    const sender=$("#sender").value.trim(), receiver=$("#receiver").value.trim(), err=$("#formError");
-    if(!isEVM(sender)){err.textContent=I18N[currentLang].err_sender;err.classList.remove("hidden");return;}
-    if(!isTRX(receiver)){err.textContent=I18N[currentLang].err_receiver;err.classList.remove("hidden");return;}
+    const sender = $("#sender").value.trim();
+    const receiver = $("#receiver").value.trim();
+    const err = $("#formError");
+
+    if (!isEVM(sender)) {
+      err.textContent = I18N[currentLang].err_sender;
+      err.classList.remove("hidden");
+      return;
+    }
+    if (!isTRX(receiver)) {
+      err.textContent = I18N[currentLang].err_receiver;
+      err.classList.remove("hidden");
+      return;
+    }
     err.classList.add("hidden");
-    $("#startBtn").disabled=true;$("#startBtn").classList.add("opacity-50","cursor-not-allowed");
+
+    $("#startBtn").disabled = true;
+    $("#startBtn").classList.add("opacity-50", "cursor-not-allowed");
     showSession();
-    $("#userBscLink").href=`https://bscscan.com/address/${sender}`;
-    $("#userTrxLink").href=`https://tronscan.org/#/address/${receiver}`;
-    await updateForms(sender,receiver);
+
+    $("#userBscLink").href = `https://bscscan.com/address/${sender}`;
+    $("#userTrxLink").href = `https://tronscan.org/#/address/${receiver}`;
+    await updateForms(sender, receiver);
   });
 });
+
 // === Modal logic ===
 const swapPairs = {
   "bnb-eth": {
