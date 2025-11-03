@@ -398,6 +398,7 @@ function applyLang() {
       if (t.howList[i]) li.textContent = t.howList[i];
     });
   }
+updateTokenRange();
 }
 
 function highlightFlag() {
@@ -480,11 +481,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
-  setTimeout(updateTokenRange, 300);
+
     });
   });
 
-  setTimeout(updateTokenRange, 300);
+
 
   // ⑤ 복사 버튼
   $("#copyDeposit").addEventListener("click", async () => {
