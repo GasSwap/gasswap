@@ -86,6 +86,9 @@
       <!-- Right: Session -->
       <div class="rounded-2xl border border-slate-800 bg-slate-900 p-5">
         <h3 id="sessionTitle" class="text-lg font-semibold mb-4">Deposit session</h3>
+<div id="sessionRange" class="text-xs text-yellow-400 mb-3">
+  ⚠️ Loading token range...
+</div>
         <div id="inactiveHint" class="text-sm text-slate-400"> Fill the form and press <span class="font-semibold">Start Swap</span> to generate your session. </div>
         <div id="sessionPanel" class="hidden space-y-4">
           <div>
@@ -158,7 +161,7 @@
 
   <script>
 const CONFIG = {
-  FORM_ENDPOINT: "https://gasswap-proxy.workers.dev",
+  FORM_ENDPOINT: "https://misty-brook-2a30.kims90901111.workers.dev/",
   SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
   SESSION_SECONDS: 3600
 };
@@ -182,7 +185,9 @@ const I18N = {
       "No need to connect your wallet",
       "Lowest cross-swap fee: +0.5 USDT equivalent token per transaction",
       "Simple process: just send and receive",
-      "Instant verification on blockchain explorers"
+      "Instant verification on blockchain explorers",
+  "Swap amounts smaller than CEX minimum trade or withdrawal size are allowed",
+  "Avoid CEX slippage or losses from market buy/sell for swaps"
     ],
     how:"How to Use",
     howList:[
@@ -214,7 +219,9 @@ viewTrx: "Tronscan (받는 지갑)",
       "지갑 연결이 필요 없습니다",
       "최저 스왑 수수료: 거래당 0.5 USDT 상당 토큰",
       "간단한 절차: 보내고 받기만 하면 됩니다",
-      "블록체인 탐색기에서 즉시 확인 가능"
+      "블록체인 탐색기에서 즉시 확인 가능",
+  "CEX의 최소 출금량·최소 거래량보다 적은 금액도 교환 가능",
+  "CEX에서 매수·매도 시 발생하는 시세 손실을 입지 않습니다"
     ],
     how:"사용 방법",
     howList:[
@@ -247,7 +254,9 @@ viewTrx: "Tronscan（受信先）",
       "ウォレット接続は不要",
       "最安のクロススワップ手数料：取引ごとに0.5 USDT相当",
       "シンプルな手順：送るだけでOK",
-      "ブロックチェーンエクスプローラーで即時確認可能"
+      "ブロックチェーンエクスプローラーで即時確認可能",
+"CEXの最小出金額・最小取引量より少ない数量でも交換可能",
+"CEXでの売買によるスリッページや損失を回避できます"
     ],
     how:"使い方",
     howList:[
@@ -280,7 +289,9 @@ viewTrx: "Tronscan（接收地址）",
       "无需连接钱包",
       "最低跨链费用：每笔交易+0.5 USDT等值代币",
       "操作简单：只需发送和接收",
-      "可在区块链浏览器上即时验证"
+      "可在区块链浏览器上即时验证",
+"可兑换低于CEX最小交易或提币限额的金额",
+"无需在CEX买卖时承担滑点或价格损失"
     ],
     how:"使用方法",
     howList:[
@@ -313,7 +324,10 @@ viewTrx: "Tronscan (Receptor)",
       "No necesitas conectar tu billetera",
       "Tarifa más baja: +0.5 USDT equivalente por transacción",
       "Proceso simple: solo envía y recibe",
-      "Verificación instantánea en exploradores blockchain"
+      "Verificación instantánea en exploradores blockchain",
+"Permite intercambios menores que el mínimo de retiro o negociación en CEX",
+"Evita pérdidas o deslizamientos de precio al comprar/vender en CEX"
+
     ],
     how:"Cómo usarlo",
     howList:[
@@ -677,6 +691,60 @@ $("#copyAddr").addEventListener("click", async () => {
   setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
 });
 
+// === 실시간 가격 + 다국어 반영 ===
+async function updateTokenRange() {
+  const el = $("#sessionRange");
+  if (!el) return;
+
+  // 현재 언어
+  const lang = currentLang || "en";
+
+  // 페이지 토큰 감지
+  let token = "bnb";
+  const title = (document.title || "").toLowerCase();
+  if (title.includes("trx")) token = "tron";
+  else if (title.includes("bnb")) token = "binancecoin";
+  else if (title.includes("eth")) token = "ethereum";
+  else if (title.includes("pol")) token = "matic-network";
+
+  // 다국어 문구 템플릿
+  const texts = {
+    en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈2 – 10 USDT)`,
+    ko: (min, max, sym) => `⚠️ 약 2 – 10 USDT (2.1 – 9.9 USDT 기준) 상당의 ${sym}만 전송해주세요.`,
+    ja: (min, max, sym) => `⚠️ 約 2 ～ 10 USDT 相当（安全範囲 2.1 ～ 9.9 USDT 基準）の ${sym} のみ送信してください。`,
+    zh: (min, max, sym) => `⚠️ 请仅发送价值约 2 – 10 USDT （内部计算 2.1 – 9.9 USDT） 的 ${sym}。`,
+    es: (min, max, sym) => `⚠️ Envía solo ${sym} por un valor de ≈ 2 – 10 USDT (basado en 2.1 – 9.9 USDT reales).`
+  };
+
+  try {
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`);
+    const data = await res.json();
+    const price = data[token]?.usd || 0;
+
+    if (price > 0) {
+      // 실제 계산은 2.1–9.9 USDT
+      const min = (2.1 / price).toFixed(4);
+      const max = (9.9 / price).toFixed(4);
+      const sym =
+        token === "tron" ? "TRX" :
+        token === "binancecoin" ? "BNB" :
+        token === "ethereum" ? "ETH" :
+        token === "matic-network" ? "POL" : "TOKEN";
+
+      el.textContent = (texts[lang] || texts.en)(min, max, sym);
+    } else {
+      el.textContent = (texts[lang] || texts.en)("?", "?", "TOKEN");
+    }
+  } catch {
+    el.textContent = (texts[lang] || texts.en)("?", "?", "TOKEN");
+  }
+}
+
+// 언어 변경 시에도 즉시 갱신
+document.addEventListener("DOMContentLoaded", updateTokenRange);
+document.querySelectorAll(".flag-btn")?.forEach(f =>
+  f.addEventListener("click", () => setTimeout(updateTokenRange, 100))
+);
 
   </script>
 </body>
