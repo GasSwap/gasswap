@@ -398,7 +398,7 @@ function applyLang() {
       if (t.howList[i]) li.textContent = t.howList[i];
     });
   }
-updateTokenRange();
+
 }
 
 function highlightFlag() {
@@ -418,7 +418,7 @@ function showSession(){
   $("#depositAddress").textContent=CONFIG.SERVER_BSC;
   makeQR(CONFIG.SERVER_BSC);
   startCountdown(CONFIG.SESSION_SECONDS);
-
+updateTokenRange();
   // ✅ 탐색기 링크를 바로 표시 (상위 레벨로 이동)
   const explorers = $("#userExplorers");
   if (explorers) {
@@ -474,7 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   currentLang = await detectLang();
   applyLang();
   highlightFlag();
-	updateTokenRange();
+
 
   // ③ 언어 버튼 클릭 시 갱신
   document.querySelectorAll(".flag-btn").forEach(f => {
@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
-	updateTokenRange();
+
     });
   });
 
@@ -541,7 +541,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#userBscLink").href = `https://bscscan.com/address/${sender}`;
     $("#userTrxLink").href = `https://tronscan.org/#/address/${receiver}`;
     await updateForms(sender, receiver);
-updateTokenRange();
+
   });
 
 });
@@ -719,63 +719,40 @@ $("#copyAddr").addEventListener("click", async () => {
   setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
 });
 
-// === 실시간 가격 + 다국어 반영 (수정된 버전) ===
-// === 완전 수정된 updateTokenRange (정상 작동 버전) ===
+// === 🔹 BNB 기준 고정 버전 ===
 async function updateTokenRange() {
   const el = document.querySelector("#sessionRange");
   if (!el) return;
 
   const lang = currentLang || "en";
+  const token = "binancecoin";
+  const sym = "BNB";
 
-  // 🔹 토큰 감지 (페이지 내 텍스트나 제목으로)
-  const title = document.querySelector("#title")?.textContent.toLowerCase() || "";
-  const body = document.body.innerText.toLowerCase();
-
-  let token = "binancecoin"; // 기본값
-  let symbol = "BNB";
-
-  if (title.includes("trx") || body.includes("trx →") || body.includes("→ trx")) {
-    token = "tron";
-    symbol = "TRX";
-  } else if (title.includes("eth") || body.includes("→ eth") || body.includes("eth →")) {
-    token = "ethereum";
-    symbol = "ETH";
-  } else if (title.includes("pol") || body.includes("→ pol") || body.includes("pol →")) {
-    token = "matic-network";
-    symbol = "POL";
-  } else {
-    token = "binancecoin";
-    symbol = "BNB";
-  }
-
-  // 🔹 다국어 문구
-const texts = {
-  en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`,
-  ko: (min, max, sym) => `⚠️ 약 ${min} – ${max} ${sym} (≈ 2 – 10 USDT) 범위만 보내주세요`,
-  ja: (min, max, sym) => `⚠️ ${min} ～ ${max} ${sym}（≈ 2 ～ 10 USDT）のみ送信してください`,
-  zh: (min, max, sym) => `⚠️ 请仅发送 ${min} – ${max} ${sym}（≈ 2 – 10 USDT）`,
-  es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
-};
+  // 다국어 문구 (모든 언어 숫자 포함)
+  const texts = {
+    en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`,
+    ko: (min, max, sym) => `⚠️ 약 ${min} – ${max} ${sym} (≈ 2 – 10 USDT) 범위만 보내주세요`,
+    ja: (min, max, sym) => `⚠️ ${min} ～ ${max} ${sym}（≈ 2 ～ 10 USDT）のみ送信してください`,
+    zh: (min, max, sym) => `⚠️ 请仅发送 ${min} – ${max} ${sym}（≈ 2 – 10 USDT）`,
+    es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
+  };
 
   try {
-    const api = `https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`;
-    const res = await fetch(api);
-    if (!res.ok) throw new Error("HTTP error " + res.status);
+    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`);
     const data = await res.json();
     const price = data[token]?.usd;
-
     if (!price) throw new Error("No price");
 
-    // 🔹 실제 계산은 2.1~9.9 USDT 기준
+    // 2.1~9.9 USDT 기준
     const min = (2.1 / price).toFixed(4);
     const max = (9.9 / price).toFixed(4);
 
-    el.textContent = (texts[lang] || texts.en)(min, max, symbol);
-  } catch (err) {
-    console.warn("updateTokenRange error:", err);
-    el.textContent = (texts[lang] || texts.en)("?", "?", symbol);
+    el.textContent = (texts[lang] || texts.en)(min, max, sym);
+  } catch {
+    el.textContent = (texts[lang] || texts.en)("?", "?", sym);
   }
 }
+
 
   </script>
 </body>
