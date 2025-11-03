@@ -115,7 +115,7 @@
     <!-- NOTICE -->
     <section class="mt-8 text-center">
       <div id="noticeBox" class="bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 rounded-xl p-4 text-sm leading-relaxed">
-        ⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.
+        ⚠️ For security: deposits under 2 USDT or above 10 USDT are not accepted. Please send only small amounts for gas purposes.
       </div>
     </section>
 
@@ -128,13 +128,15 @@
           <li>Lowest cross-swap fee: +0.5 USDT equivalent token per transaction</li>
           <li>Simple process: just send and receive</li>
           <li>Instant verification on blockchain explorers</li>
+<li>Swap amounts smaller than CEX minimum trade or withdrawal size are allowed</li>
+<li>Avoid CEX slippage or losses from market buy/sell for swaps</li>
         </ul>
         <h3 class="text-lg font-semibold mt-6 mb-3 text-center text-emerald-300">How to Use</h3>
         <ol class="list-decimal list-inside space-y-1">
           <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
           <li>Send BNB to the displayed deposit address</li>
           <li>Receive TRX automatically (usually within 5 minutes depending on network conditions)</li>
-          <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing).</li>
+          <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing).</li>
         </ol>
 
       </div>
@@ -194,9 +196,9 @@ const I18N = {
       "Enter both the Sender and Receiver wallet addresses correctly",
       "Send BNB to the displayed deposit address",
       "Receive TRX automatically (usually within 5 minutes depending on network conditions)",
-      "To prevent automated attacks and speculative swaps, any transaction value outside the range of 1 – 20 USDT will be automatically refunded (minus a fee for processing)."
+      "To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing)."
     ],
-    notice:"⚠️ For security: deposits under 1 USDT or above 20 USDT are not accepted. Please send only small amounts for gas purposes.",
+    notice:"⚠️ For security: deposits under 2 USDT or above 10 USDT are not accepted. Please send only small amounts for gas purposes.",
     err_sender:"Invalid BSC address",
     err_receiver:"Invalid TRX address"
   },
@@ -228,9 +230,9 @@ viewTrx: "Tronscan (받는 지갑)",
       "보내는 지갑과 받는 지갑 주소를 정확히 입력하세요",
       "표시된 입금 주소로 BNB를 전송하세요",
       "네트워크 상황에 따라 약 5분 내 TRX가 자동 입금됩니다",
-      "자동 공격 및 투기성 스왑을 방지하기 위해 1~20 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다."
+      "자동 공격 및 투기성 스왑을 방지하기 위해 2~10 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다."
     ],
-    notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 1 USDT 미만 또는 20 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
+    notice:"⚠️ 자동 공격 방지 및 가스 보호를 위해 2 USDT 미만 또는 10 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
     err_sender:"BNB(BSC) 주소가 올바르지 않습니다.",
     err_receiver:"TRX 주소가 올바르지 않습니다."
   },
@@ -263,9 +265,9 @@ viewTrx: "Tronscan（受信先）",
       "送信元と受信先のウォレットアドレスを正確に入力してください",
       "表示された入金先アドレスにBNBを送信します",
       "ネットワーク状況により約5分以内にTRXを自動受信します",
-      "自動攻撃や投機的なスワップを防ぐため、1～20 USDTの範囲外の取引は手数料を差し引いて自動返金されます。"
+      "自動攻撃や投機的なスワップを防ぐため、2～10 USDTの範囲外の取引は手数料を差し引いて自動返金されます。"
     ],
-    notice:"⚠️ セキュリティのため、1 USDT未満または20 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
+    notice:"⚠️ セキュリティのため、2 USDT未満または10 USDT超の入金は受け付けません。ガス目的の少額のみを送信してください。",
     err_sender:"BSCアドレスが無効です。",
     err_receiver:"TRXアドレスが無効です。"
   },
@@ -298,9 +300,9 @@ viewTrx: "Tronscan（接收地址）",
       "正确输入发送和接收钱包地址",
       "向显示的存款地址发送BNB",
       "通常5分钟内自动收到TRX（视网络情况而定）",
-      "为防止自动攻击和投机性交换，超出1–20 USDT范围的交易将自动退款（扣除处理费用）。"
+      "为防止自动攻击和投机性交换，超出2–10 USDT范围的交易将自动退款（扣除处理费用）。"
     ],
-    notice:"⚠️ 为了安全，请勿转入1 USDT以下或20 USDT以上金额。仅用于Gas的小额入金。",
+    notice:"⚠️ 为了安全，请勿转入2 USDT以下或10 USDT以上金额。仅用于Gas的小额入金。",
     err_sender:"无效的 BSC 地址",
     err_receiver:"无效的 TRX 地址"
   },
@@ -334,9 +336,9 @@ viewTrx: "Tronscan (Receptor)",
       "Introduce correctamente las direcciones de remitente y receptor",
       "Envía BNB a la dirección mostrada",
       "Recibe TRX automáticamente (normalmente dentro de 5 minutos, según la red)",
-      "Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 1–20 USDT será reembolsada automáticamente (menos una tarifa de procesamiento)."
+      "Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 2–10 USDT será reembolsada automáticamente (menos una tarifa de procesamiento)."
     ],
-    notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 1 USDT o mayores a 20 USDT. Envía solo pequeñas cantidades con fines de gas.",
+    notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 2 USDT o mayores a 10 USDT. Envía solo pequeñas cantidades con fines de gas.",
     err_sender:"Dirección BSC inválida",
     err_receiver:"Dirección TRX inválida"
   }
