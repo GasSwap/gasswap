@@ -719,16 +719,16 @@ $("#copyAddr").addEventListener("click", async () => {
   setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
 });
 
-// === 🔹 BNB 기준 고정 버전 ===
+// === 🔹 가격 캐시 버전 (BNB 고정, 다국어 포함) ===
+let cachedPrice = null;
+let lastPriceTime = 0; // ms 단위로 기록
+
 async function updateTokenRange() {
   const el = document.querySelector("#sessionRange");
   if (!el) return;
 
   const lang = currentLang || "en";
-  const token = "binancecoin";
   const sym = "BNB";
-
-  // 다국어 문구 (모든 언어 숫자 포함)
   const texts = {
     en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`,
     ko: (min, max, sym) => `⚠️ 약 ${min} – ${max} ${sym} (≈ 2 – 10 USDT) 범위만 보내주세요`,
@@ -737,18 +737,33 @@ async function updateTokenRange() {
     es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
   };
 
-  try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`);
-    const data = await res.json();
-    const price = data[token]?.usd;
-    if (!price) throw new Error("No price");
+  // ✅ ① 캐시 유효시간 5분(300초)
+  const now = Date.now();
+  const cacheValid = cachedPrice && (now - lastPriceTime < 5 * 60 * 1000);
 
-    // 2.1~9.9 USDT 기준
+  let price = cachedPrice;
+
+  // ✅ ② 캐시가 없으면 CoinGecko에서 새로 가져오기
+  if (!cacheValid) {
+    try {
+      const res = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd"
+      );
+      const data = await res.json();
+      price = data["binancecoin"]?.usd || 0;
+      cachedPrice = price;
+      lastPriceTime = now;
+    } catch {
+      price = cachedPrice || 0;
+    }
+  }
+
+  // ✅ ③ 가격 계산 및 출력
+  if (price > 0) {
     const min = (2.1 / price).toFixed(4);
     const max = (9.9 / price).toFixed(4);
-
     el.textContent = (texts[lang] || texts.en)(min, max, sym);
-  } catch {
+  } else {
     el.textContent = (texts[lang] || texts.en)("?", "?", sym);
   }
 }
