@@ -743,16 +743,6 @@ async function updateTokenRange() {
   }
 }
 
-// === 🔹 실행 시점 지연 (언어 감지 후 실행되도록)
-document.addEventListener("DOMContentLoaded", () => {
-  setTimeout(updateTokenRange, 300);
-});
-
-// 언어 버튼 눌렀을 때도 갱신
-document.querySelectorAll(".flag-btn")?.forEach(f =>
-  f.addEventListener("click", () => setTimeout(updateTokenRange, 200))
-);
-
   </script>
 </body>
 </html>
