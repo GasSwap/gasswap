@@ -771,22 +771,23 @@ async function updateTokenRange() {
   }
 }
 
-// === 🔹 모달 내 입금 범위 표시 ===
-function updateModalRange(type) {
+// === 🔹 모달 내 입금 범위 표시 (토큰별 가격 계산 반영) ===
+async function updateModalRange(type) {
   const el = document.querySelector("#modalRange");
   if (!el) return;
 
   const lang = currentLang || "en";
-  const symMap = {
-    "bnb-eth": "BNB",
-    "eth-bnb": "ETH",
-    "bnb-pol": "BNB",
-    "pol-bnb": "POL"
-  };
-  const sym = symMap[type] || "BNB";
 
-  // ✅ 캐시된 가격 사용 (없으면 BNB로)
-  const price = cachedPrice || 0;
+  // 🔹 입금 토큰별 심볼 & CoinGecko ID
+  const tokenInfo = {
+    "bnb-eth": { sym: "BNB", id: "binancecoin" },
+    "eth-bnb": { sym: "ETH", id: "ethereum" },
+    "bnb-pol": { sym: "BNB", id: "binancecoin" },
+    "pol-bnb": { sym: "POL", id: "matic-network" }
+  };
+
+  const { sym, id } = tokenInfo[type] || { sym: "BNB", id: "binancecoin" };
+
   const texts = {
     en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`,
     ko: (min, max, sym) => `⚠️ 약 ${min} – ${max} ${sym} (≈ 2 – 10 USDT) 범위만 보내주세요`,
@@ -795,11 +796,22 @@ function updateModalRange(type) {
     es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
   };
 
-  if (price > 0) {
-    const min = (2.1 / price).toFixed(4);
-    const max = (9.9 / price).toFixed(4);
-    el.textContent = (texts[lang] || texts.en)(min, max, sym);
-  } else {
+  try {
+    // ✅ 해당 토큰의 실시간 USD 가격 요청
+    const res = await fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd`
+    );
+    const data = await res.json();
+    const price = data[id]?.usd || 0;
+
+    if (price > 0) {
+      const min = (2.1 / price).toFixed(4);
+      const max = (9.9 / price).toFixed(4);
+      el.textContent = (texts[lang] || texts.en)(min, max, sym);
+    } else {
+      el.textContent = (texts[lang] || texts.en)("?", "?", sym);
+    }
+  } catch {
     el.textContent = (texts[lang] || texts.en)("?", "?", sym);
   }
 }
