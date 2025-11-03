@@ -474,6 +474,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   currentLang = await detectLang();
   applyLang();
   highlightFlag();
+	updateTokenRange();
 
   // ③ 언어 버튼 클릭 시 갱신
   document.querySelectorAll(".flag-btn").forEach(f => {
@@ -719,23 +720,35 @@ $("#copyAddr").addEventListener("click", async () => {
 });
 
 // === 실시간 가격 + 다국어 반영 (수정된 버전) ===
+// === 완전 수정된 updateTokenRange (정상 작동 버전) ===
 async function updateTokenRange() {
-  const el = $("#sessionRange");
+  const el = document.querySelector("#sessionRange");
   if (!el) return;
 
   const lang = currentLang || "en";
 
-  // === 🔹 토큰 감지 (제목과 본문을 모두 체크해서 더 정확히) ===
-  let token = "binancecoin"; // 기본값: BNB
-  const title = (document.title || "").toLowerCase();
-  const bodyText = document.body.innerText.toLowerCase();
+  // 🔹 토큰 감지 (페이지 내 텍스트나 제목으로)
+  const title = document.querySelector("#title")?.textContent.toLowerCase() || "";
+  const body = document.body.innerText.toLowerCase();
 
-  if (title.includes("trx") || bodyText.includes("trx →")) token = "tron";
-  else if (title.includes("eth") && !title.includes("bnb")) token = "ethereum";
-  else if (title.includes("pol") || bodyText.includes("pol →")) token = "matic-network";
-  else token = "binancecoin";
+  let token = "binancecoin"; // 기본값
+  let symbol = "BNB";
 
-  // === 🔹 다국어 문구 템플릿 ===
+  if (title.includes("trx") || body.includes("trx →") || body.includes("→ trx")) {
+    token = "tron";
+    symbol = "TRX";
+  } else if (title.includes("eth") || body.includes("→ eth") || body.includes("eth →")) {
+    token = "ethereum";
+    symbol = "ETH";
+  } else if (title.includes("pol") || body.includes("→ pol") || body.includes("pol →")) {
+    token = "matic-network";
+    symbol = "POL";
+  } else {
+    token = "binancecoin";
+    symbol = "BNB";
+  }
+
+  // 🔹 다국어 문구
   const texts = {
     en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈2 – 10 USDT)`,
     ko: (min, max, sym) => `⚠️ 약 2 – 10 USDT 상당의 ${sym}만 전송해주세요.`,
@@ -745,26 +758,22 @@ async function updateTokenRange() {
   };
 
   try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`);
+    const api = `https://api.coingecko.com/api/v3/simple/price?ids=${token}&vs_currencies=usd`;
+    const res = await fetch(api);
+    if (!res.ok) throw new Error("HTTP error " + res.status);
     const data = await res.json();
-    const price = data[token]?.usd || 0;
+    const price = data[token]?.usd;
 
-    if (price > 0) {
-      // 실제 계산은 2.1~9.9 USDT 기준
-      const min = (2.1 / price).toFixed(4);
-      const max = (9.9 / price).toFixed(4);
-      const sym =
-        token === "tron" ? "TRX" :
-        token === "binancecoin" ? "BNB" :
-        token === "ethereum" ? "ETH" :
-        token === "matic-network" ? "POL" : "TOKEN";
+    if (!price) throw new Error("No price");
 
-      el.textContent = (texts[lang] || texts.en)(min, max, sym);
-    } else {
-      el.textContent = (texts[lang] || texts.en)("?", "?", "TOKEN");
-    }
-  } catch {
-    el.textContent = (texts[lang] || texts.en)("?", "?", "TOKEN");
+    // 🔹 실제 계산은 2.1~9.9 USDT 기준
+    const min = (2.1 / price).toFixed(4);
+    const max = (9.9 / price).toFixed(4);
+
+    el.textContent = (texts[lang] || texts.en)(min, max, symbol);
+  } catch (err) {
+    console.warn("updateTokenRange error:", err);
+    el.textContent = (texts[lang] || texts.en)("?", "?", symbol);
   }
 }
 
