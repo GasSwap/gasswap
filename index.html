@@ -480,11 +480,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
-      setTimeout(updateTokenRange, 200); // 언어 바뀐 후 가격 갱신
+  setTimeout(updateTokenRange, 300);
     });
   });
 
-  // ④ 페이지 로드 후 0.3초 뒤 가격 표시 (언어 반영 완료 후)
   setTimeout(updateTokenRange, 300);
 
   // ⑤ 복사 버튼
