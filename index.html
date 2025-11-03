@@ -481,7 +481,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
-
+	updateTokenRange();
     });
   });
 
@@ -540,7 +540,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#userBscLink").href = `https://bscscan.com/address/${sender}`;
     $("#userTrxLink").href = `https://tronscan.org/#/address/${receiver}`;
     await updateForms(sender, receiver);
+updateTokenRange();
   });
+
 });
 
 // === Modal logic ===
