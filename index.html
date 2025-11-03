@@ -476,7 +476,9 @@ document.addEventListener("DOMContentLoaded", async ()=>{
       currentLang = f.dataset.lang;
       applyLang();
       highlightFlag();
+setTimeout(updateTokenRange, 200);
     })
+setTimeout(updateTokenRange, 300);
   );
 
   $("#copyDeposit").addEventListener("click", async ()=>{
@@ -711,10 +713,10 @@ async function updateTokenRange() {
   // === 🔹 다국어 문구 템플릿 ===
   const texts = {
     en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈2 – 10 USDT)`,
-    ko: (min, max, sym) => `⚠️ 약 2 – 10 USDT (2.1 – 9.9 USDT 기준) 상당의 ${sym}만 전송해주세요.`,
-    ja: (min, max, sym) => `⚠️ 約 2 ～ 10 USDT 相当（安全範囲 2.1 ～ 9.9 USDT 基準）の ${sym} のみ送信してください。`,
-    zh: (min, max, sym) => `⚠️ 请仅发送价值约 2 – 10 USDT （内部计算 2.1 – 9.9 USDT） 的 ${sym}。`,
-    es: (min, max, sym) => `⚠️ Envía solo ${sym} por un valor de ≈ 2 – 10 USDT (basado en 2.1 – 9.9 USDT reales).`
+    ko: (min, max, sym) => `⚠️ 약 2 – 10 USDT 상당의 ${sym}만 전송해주세요.`,
+    ja: (min, max, sym) => `⚠️ 約 2 ～ 10 USDT 相当の ${sym} のみ送信してください。`,
+    zh: (min, max, sym) => `⚠️ 请仅发送价值约 2 – 10 USDT 的 ${sym}。`,
+    es: (min, max, sym) => `⚠️ Envía solo ${sym} por un valor de ≈ 2 – 10 USDT.`
   };
 
   try {
