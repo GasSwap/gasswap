@@ -504,7 +504,7 @@ async function updateModalRange(type){
     "bnb-eth": { sym:"BNB", id:"binancecoin" },
     "eth-bnb": { sym:"ETH", id:"ethereum" },
     "bnb-pol": { sym:"BNB", id:"binancecoin" },
-    "pol-bnb": { sym:"POL", id:"matic-network" }
+    "pol-bnb": { sym:"POL", id:"polygon-ecosystem-token" }
   };
   const meta = tokenMap[type] || { sym:"BNB", id:"binancecoin" };
   const price = await getPriceUSD(meta.id);
