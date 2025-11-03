@@ -149,6 +149,7 @@
     <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
     <p id="modalDesc" class="text-slate-400 text-sm mb-4"></p>
     <div class="text-xs text-slate-400 mb-2" id="modalDepositLabel"></div>
+<div id="modalRange" class="text-xs text-yellow-400 mb-2"></div>
     <code id="modalAddress" class="block text-emerald-300 break-all mb-3">0xDA1E8b362DDe013EA87Cf8984D64490c1900d231</code>
     <button id="copyAddr" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-4">Copy Address</button>
     <div id="modalQR" class="flex justify-center mb-4"></div>
@@ -684,7 +685,7 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
 const address = depositAddresses[type]; // 스왑쌍별 주소 가져오기
 $("#modalAddress").textContent = address;
 new QRCode(qrDiv, { text: address, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
-
+updateModalRange(type);
 $("#explorerLinks").innerHTML = `
   🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
   🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
@@ -770,7 +771,38 @@ async function updateTokenRange() {
   }
 }
 
+// === 🔹 모달 내 입금 범위 표시 ===
+function updateModalRange(type) {
+  const el = document.querySelector("#modalRange");
+  if (!el) return;
 
+  const lang = currentLang || "en";
+  const symMap = {
+    "bnb-eth": "BNB",
+    "eth-bnb": "ETH",
+    "bnb-pol": "BNB",
+    "pol-bnb": "POL"
+  };
+  const sym = symMap[type] || "BNB";
+
+  // ✅ 캐시된 가격 사용 (없으면 BNB로)
+  const price = cachedPrice || 0;
+  const texts = {
+    en: (min, max, sym) => `⚠️ Please send only ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`,
+    ko: (min, max, sym) => `⚠️ 약 ${min} – ${max} ${sym} (≈ 2 – 10 USDT) 범위만 보내주세요`,
+    ja: (min, max, sym) => `⚠️ ${min} ～ ${max} ${sym}（≈ 2 ～ 10 USDT）のみ送信してください`,
+    zh: (min, max, sym) => `⚠️ 请仅发送 ${min} – ${max} ${sym}（≈ 2 – 10 USDT）`,
+    es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
+  };
+
+  if (price > 0) {
+    const min = (2.1 / price).toFixed(4);
+    const max = (9.9 / price).toFixed(4);
+    el.textContent = (texts[lang] || texts.en)(min, max, sym);
+  } else {
+    el.textContent = (texts[lang] || texts.en)("?", "?", sym);
+  }
+}
   </script>
 </body>
 </html>
