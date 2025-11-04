@@ -357,9 +357,9 @@ let currentLang = "en";
 
 async function detectLang() {
   try {
-    const r = await fetch("https://ipapi.co/json/");
+    const r = await fetch("https://api.country.is/");
     const j = await r.json();
-    const c = (j.country_code || "").toUpperCase();
+    const c = (j.country || "").toUpperCase();
     if (c === "KR") return "ko";
     if (c === "JP") return "ja";
     if (["CN","TW","HK","MO"].includes(c)) return "zh";
@@ -369,6 +369,7 @@ async function detectLang() {
     return "en";
   }
 }
+
 
 function applyLang() {
   const t = I18N[currentLang];
