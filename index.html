@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GasSwap – Cross-Chain Swap</title>
   <meta name="description" content="Deposit BNB (BSC) and receive TRX automatically. Simple cross-chain swap request UI." />
-  <link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" type="image/png" href="favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -48,12 +48,27 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <a href="index.html" class="text-center rounded-xl py-3 bg-emerald-500 text-slate-950 font-semibold">BNB → TRX</a>
-  <a href="trx_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">TRX → BNB</a>
-  <button data-type="bnb-eth" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → ETH</button>
-  <button data-type="eth-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">ETH → BNB</button>
-  <button data-type="bnb-pol" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">BNB → POL</button>
-  <button data-type="pol-bnb" class="text-center rounded-xl py-3 bg-emerald-500/80 hover:bg-emerald-500 text-slate-950 font-semibold">POL → BNB</button>
+  <!-- 활성 메뉴 -->
+  <a href="index.html" class="text-center rounded-xl py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold shadow-md">
+    BNB → TRX
+  </a>
+  <a href="trx_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold shadow-md">
+    TRX → BNB
+  </a>
+
+  <!-- 비활성화된 메뉴 -->
+  <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
+    BNB → ETH
+  </button>
+  <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
+    ETH → BNB
+  </button>
+  <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
+    BNB → POL
+  </button>
+  <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
+    POL → BNB
+  </button>
 </section>
 
 
