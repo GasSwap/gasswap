@@ -465,15 +465,27 @@ function startCountdown(s){
 }
 
 /* =============== Forms (save to GitHub via Worker) =============== */
+// ✅ TRX → BNB 페이지용
 async function updateForms(sender, receiver) {
   const repo = "GasSwap/gasswap-data";
-  const path = "data/forms.json";
-  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+
+  // 🔹 여기만 다름 (pair 설정)
+  const pair = "trx-bnb";   // ✅ TRX → BNB 로 변경
+
+  const path =
+    pair === "bnb-trx" ? "data/forms.json" :
+    pair === "trx-bnb" ? "data/forms2.json" :
+    "data/forms.json";
 
   const res = await fetch(CONFIG.FORM_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sender, receiver, repo, path, url })
+    body: JSON.stringify({
+      sender,
+      receiver,
+      repo,
+      pair   // ✅ 워커로 함께 전송
+    })
   });
 
   if (res.ok) alert("✅ Saved!");
