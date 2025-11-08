@@ -486,18 +486,16 @@ async function updateForms(sender, receiver) {
       sender,
       receiver,
       repo,
-      pair,   // ✅ 추가: 워커에서도 구분용으로 사용
+      pair,   // ✅ 워커 구분용
     })
   });
 
-  if (res.ok) alert("✅ Saved!");
-  else alert("❌ Error: " + await res.text());
-}
-
-
-  if (res.ok) alert("✅ Saved!");
-  else alert("❌ Error: " + await res.text());
-}
+  if (res.ok) {
+    alert("✅ Saved!");
+  } else {
+    alert("❌ Error: " + await res.text());
+  }
+} // ✅ ← 함수 닫기 (여기서 끝)
 
 
 document.addEventListener("DOMContentLoaded", async () => {
