@@ -47,11 +47,17 @@
     </section>
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <!-- 활성 메뉴 -->
-  <a href="index.html" class="text-center rounded-xl py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold shadow-md">
+<!-- Swap Menu -->
+<section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
+  <!-- 다른 활성 메뉴 (조금 더 옅게) -->  
+  <a href="index.html"
+     class="text-center rounded-xl py-3 bg-emerald-400 hover:bg-emerald-500 text-slate-950 font-semibold shadow-md">
     BNB → TRX
   </a>
-  <a href="trx_bnb.html" class="text-center rounded-xl py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold shadow-md">
+
+<!-- 현재 선택된 메뉴 (더 진하고 클릭 불가하게) -->
+  <a href="trx_bnb.html"
+     class="text-center rounded-xl py-3 bg-emerald-600 text-slate-950 font-semibold shadow-md cursor-default pointer-events-none">
     TRX → BNB
   </a>
 
@@ -152,7 +158,8 @@
           <li>Enter both the <b>Sender</b> and <b>Receiver</b> wallet addresses correctly</li>
           <li>Send TRX to the displayed deposit address</li>
           <li>Receive BNB (BSC) automatically (usually within 5 minutes depending on network conditions)</li>
-          <li>To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing).</li>
+<li style="list-style: none; margin-top: 6px; font-size: 0.9em; color: #ccc;">Note: To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing).</li>
+<li style="list-style: none; margin-top: 6px; font-size: 0.9em; color: #ccc;">Note: If the gas fee for the refunded token temporarily spikes above 0.5 USDT, the swap fee increases to 1 USDT. If the gas fee exceeds 1.0 USDT, the full amount will be refunded to the sender.</li>
         </ol>
       </div>
     </section>
@@ -185,7 +192,7 @@
 /* =============== CONFIG =============== */
 const CONFIG = {
   FORM_ENDPOINT: "https://misty-brook-2a30.kims90901111.workers.dev/",
-  SERVER_TRX: "TXMTkzp5guZ1nrhQPrzW7S5JvW8MbJ67LY", // ✅ TRX 고정 입금주소로 변경 (예: T...)
+  SERVER_TRX: "TXiLFN8XdxZm2FzJi6bR54Fj7JE3acABth", // ✅ TRX 고정 입금주소로 변경 (예: T...)
   SESSION_SECONDS: 3600
 };
 
@@ -219,7 +226,8 @@ const I18N = {
       "Enter both the Sender and Receiver wallet addresses correctly",
       "Send TRX to the displayed deposit address",
       "Receive BNB (BSC) automatically (usually within 5 minutes depending on network conditions)",
-      "To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing)."
+      "Note: To prevent automated attacks and speculative swaps, any transaction value outside the range of 2 – 10 USDT will be automatically refunded (minus a fee for processing).",
+"Note: If the gas fee for the refunded token temporarily spikes above 0.5 USDT, the swap fee increases to 1 USDT. If the gas fee exceeds 1.0 USDT, the full amount will be refunded to the sender."
     ],
     notice:"⚠️ For security: deposits under 2 USDT or above 10 USDT are not accepted. Please send only small amounts for gas purposes.",
     err_sender:"Invalid TRX address",
@@ -254,7 +262,8 @@ const I18N = {
       "보내는 지갑과 받는 지갑 주소를 정확히 입력하세요",
       "표시된 입금 주소로 TRX를 전송하세요",
       "네트워크 상황에 따라 약 5분 내 BNB(BSC)가 자동 입금됩니다",
-      "자동 공격 및 투기성 스왑 방지를 위해 2–10 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다."
+      "참고: 자동 공격 및 투기성 스왑을 방지하기 위해 2~10 USDT 범위를 벗어난 거래는 처리 수수료를 제외하고 자동 환불됩니다.",
+"참고: 환급되는 토큰의 전송수수료가 일시적으로 폭등해서 0.5 USDT 이상이 되는 경우 스왑 수수료는 1 USDT 로 증가. 전송수수료가 1.0 USDT 이상인 경우는 보낸 주소로 전액 환불."
     ],
     notice:"⚠️ 보안상 2 USDT 미만 또는 10 USDT 초과 입금은 허용되지 않습니다. 가스 목적의 소액만 전송해주세요.",
     err_sender:"TRX 주소가 올바르지 않습니다.",
@@ -289,7 +298,8 @@ const I18N = {
       "送信元と受信先のウォレットアドレスを正確に入力してください",
       "表示された入金先アドレスに TRX を送信します",
       "ネットワーク状況により約 5 分以内に BNB(BSC) を自動受信します",
-      "自動攻撃や投機的なスワップを防ぐため、2–10 USDT の範囲外の取引は手数料を差し引いて自動返金されます。"
+      "注意：自動攻撃や投機的なスワップを防ぐため、2～10 USDTの範囲外の取引は手数料を差し引いて自動返金されます。",
+"注意：返金されるトークンの送金手数料が一時的に0.5 USDTを超える場合、スワップ手数料は1 USDTに増加します。送金手数料が1.0 USDTを超える場合は、送信元アドレスに全額返金されます。"
     ],
     notice:"⚠️ セキュリティのため、2 USDT 未満または 10 USDT 超の入金は受け付けません。ガス目的の少額のみを送信してください。",
     err_sender:"TRX アドレスが無効です。",
@@ -324,7 +334,8 @@ const I18N = {
       "正确输入发送与接收钱包地址",
       "向显示的存款地址发送 TRX",
       "通常 5 分钟内自动收到 BNB（BSC）（视网络情况而定）",
-      "为防止自动攻击与投机性交换，超出 2–10 USDT 范围的交易将自动退款（扣除处理费用）。"
+      "注意：为防止自动攻击和投机性交换，超出2–10 USDT范围的交易将自动退款（扣除处理费用）。",
+"注意：如果退款代币的转账手续费暂时超过 0.5 USDT，兑换手续费将提高至 1 USDT。若转账手续费超过 1.0 USDT，将全额退回至发送地址。"
     ],
     notice:"⚠️ 为安全起见，请勿转入 2 USDT 以下或 10 USDT 以上金额。仅用于 Gas 的小额入金。",
     err_sender:"无效的 TRX 地址",
@@ -359,7 +370,8 @@ const I18N = {
       "Introduce correctamente las direcciones de remitente y receptor",
       "Envía TRX a la dirección mostrada",
       "Recibe BNB (BSC) automáticamente (normalmente dentro de 5 minutos, según la red)",
-      "Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 2–10 USDT será reembolsada automáticamente (menos una tarifa de procesamiento)."
+      "Nota: Para evitar ataques automáticos y swaps especulativos, cualquier transacción fuera del rango de 2–10 USDT será reembolsada automáticamente (menos una tarifa de procesamiento).",
+"Nota: Si la tarifa de gas del reembolso supera temporalmente 0.5 USDT, la comisión de intercambio aumentará a 1 USDT. Si la tarifa de gas supera 1.0 USDT, el monto total será reembolsado al remitente."
     ],
     notice:"⚠️ Por seguridad, no se aceptan depósitos menores a 2 USDT o mayores a 10 USDT. Envía solo pequeñas cantidades con fines de gas.",
     err_sender:"Dirección TRX inválida",
