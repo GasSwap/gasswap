@@ -48,19 +48,19 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <!-- 현재 선택된 메뉴 (더 진하고 클릭 불가하게) -->
+
   <a href="index.html"
      class="text-center rounded-xl py-3 bg-emerald-600 text-slate-950 font-semibold shadow-md cursor-default pointer-events-none">
     BNB → TRX
   </a>
 
-  <!-- 다른 활성 메뉴 (조금 더 옅게) -->
+
   <a href="trx_bnb.html"
      class="text-center rounded-xl py-3 bg-emerald-400 hover:bg-emerald-500 text-slate-950 font-semibold shadow-md">
     TRX → BNB
   </a>
 
-  <!-- 비활성화된 메뉴 -->
+
   <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
     BNB → ETH
   </button>
@@ -417,7 +417,7 @@ function applyLang() {
   document.querySelector("h3.text-emerald-300").textContent = t.why;
   document.querySelectorAll("h3.text-emerald-300")[1].textContent = t.how;
 
-  // ✅ 추가: Why / How 리스트 번역
+
   const whyItems = document.querySelectorAll(".list-disc li");
   const howItems = document.querySelectorAll(".list-decimal li");
 
@@ -453,7 +453,7 @@ function showSession(){
   makeQR(CONFIG.SERVER_BSC);
   startCountdown(CONFIG.SESSION_SECONDS);
 updateTokenRange();
-  // ✅ 탐색기 링크를 바로 표시 (상위 레벨로 이동)
+
   const explorers = $("#userExplorers");
   if (explorers) {
     explorers.classList.remove("hidden");
@@ -463,27 +463,26 @@ updateTokenRange();
 
 function startCountdown(s){
   const el=$("#countdown"), end=Date.now()+s*1000;
-  el.style.textAlign="right"; // ✅ 오른쪽 정렬 추가
+  el.style.textAlign="right"; 
 
   const tick=()=>{
     const r=Math.max(0,Math.floor((end-Date.now())/1000));
     const m=String(Math.floor(r/60)).padStart(2,"0");
     const sec=String(r%60).padStart(2,"0");
-    el.textContent=`${m}:${sec}`; // ✅ mm:ss 형식으로 표시
+    el.textContent=`${m}:${sec}`; 
     if(r>0) setTimeout(tick,1000);
   };
   tick();
 }
 
-// ✅ 수정된 updateForms 함수
+
 async function updateForms(sender, receiver) {
   const repo = "GasSwap/gasswap-data";
 
-  // ✅ ① 페이지 제목(title) 또는 파일 이름을 기준으로 pair 자동 결정
-  // 이 페이지는 BNB→TRX 이므로 pair 고정
+
   const pair = "bnb-trx";
 
-  // ✅ ② pair에 따라 파일명 자동 선택
+
   const path =
     pair === "bnb-trx" ? "data/forms.json" :
     pair === "trx-bnb" ? "data/forms2.json" :
@@ -496,7 +495,7 @@ async function updateForms(sender, receiver) {
       sender,
       receiver,
       repo,
-      pair,   // ✅ 워커 구분용
+      pair,   
     })
   });
 
@@ -505,20 +504,20 @@ async function updateForms(sender, receiver) {
   } else {
     alert("❌ Error: " + await res.text());
   }
-} // ✅ ← 함수 닫기 (여기서 끝)
+} 
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // ① 기본 연도
+
   $("#year").textContent = new Date().getFullYear();
 
-  // ② 언어 자동 감지 → 적용
+
   currentLang = await detectLang();
   applyLang();
   highlightFlag();
 
 
-  // ③ 언어 버튼 클릭 시 갱신
+
   document.querySelectorAll(".flag-btn").forEach(f => {
     f.addEventListener("click", () => {
       currentLang = f.dataset.lang;
@@ -530,7 +529,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-  // ⑤ 복사 버튼
+  
   $("#copyDeposit").addEventListener("click", async () => {
     const addr = $("#depositAddress").textContent.trim();
     const btn = $("#copyDeposit");
@@ -557,7 +556,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // ⑥ 폼 제출 이벤트
+
   $("#swapForm").addEventListener("submit", async e => {
     e.preventDefault();
     const sender = $("#sender").value.trim();
@@ -705,10 +704,10 @@ const swapPairs = {
 };
 
 const depositAddresses = {
-  "bnb-eth": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", // 🔹 BNB → ETH 입금주소
-  "eth-bnb": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", // 🔹 ETH → BNB 입금주소
-  "bnb-pol": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1", // 🔹 BNB → POL 입금주소
-  "pol-bnb": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1"  // 🔹 POL → BNB 입금주소
+  "bnb-eth": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", 
+  "eth-bnb": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6", 
+  "bnb-pol": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1", 
+  "pol-bnb": "0x3a0bba3ab85523bfaa8bf231103092807fef08a1"  
 };
 const modal = $("#swapModal"), qrDiv = $("#modalQR");
 
@@ -716,12 +715,12 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.type;
     const data = swapPairs[type];
-    const lang = currentLang || "en"; // ✅ index에서 선택한 언어 그대로 사용
+    const lang = currentLang || "en"; 
 
     $("#modalTitle").textContent = data.title;
     $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
     $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
-const address = depositAddresses[type]; // 스왑쌍별 주소 가져오기
+const address = depositAddresses[type]; 
 $("#modalAddress").textContent = address;
 new QRCode(qrDiv, { text: address, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
 updateModalRange(type);
@@ -729,7 +728,7 @@ $("#explorerLinks").innerHTML = `
   🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
   🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
 `;
-// === 추가: BNB→ETH 안내문 표시 ===
+
 const noticeDiv = $("#bnbEthNotice");
 if (type === "bnb-eth") {
   const feeTexts = {
@@ -761,7 +760,7 @@ $("#copyAddr").addEventListener("click", async () => {
   setTimeout(() => { b.textContent = old; b.classList.remove("border-emerald-500"); }, 1500);
 });
 
-// === 🔹 가격 캐시 버전 (BNB 고정, 다국어 포함) ===
+
 let cachedPrice = null;
 let lastPriceTime = 0; // ms 단위로 기록
 
@@ -779,13 +778,13 @@ async function updateTokenRange() {
     es: (min, max, sym) => `⚠️ Envía solo ${min} – ${max} ${sym} (≈ 2 – 10 USDT)`
   };
 
-  // ✅ ① 캐시 유효시간 5분(300초)
+
   const now = Date.now();
   const cacheValid = cachedPrice && (now - lastPriceTime < 5 * 60 * 1000);
 
   let price = cachedPrice;
 
-  // ✅ ② 캐시가 없으면 CoinGecko에서 새로 가져오기
+
   if (!cacheValid) {
     try {
       const res = await fetch(
@@ -800,7 +799,7 @@ async function updateTokenRange() {
     }
   }
 
-  // ✅ ③ 가격 계산 및 출력
+
   if (price > 0) {
     const min = (2.1 / price).toFixed(4);
     const max = (9.9 / price).toFixed(4);
@@ -810,14 +809,14 @@ async function updateTokenRange() {
   }
 }
 
-// === 🔹 모달 내 입금 범위 표시 (토큰별 가격 계산 반영) ===
+
 async function updateModalRange(type) {
   const el = document.querySelector("#modalRange");
   if (!el) return;
 
   const lang = currentLang || "en";
 
-  // 🔹 입금 토큰별 심볼 & CoinGecko ID
+
   const tokenInfo = {
     "bnb-eth": { sym: "BNB", id: "binancecoin" },
     "eth-bnb": { sym: "ETH", id: "ethereum" },
@@ -836,7 +835,7 @@ async function updateModalRange(type) {
   };
 
   try {
-    // ✅ 해당 토큰의 실시간 USD 가격 요청
+
     const res = await fetch(
       `https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd`
     );
