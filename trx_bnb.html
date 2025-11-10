@@ -48,19 +48,19 @@
 
 <!-- Swap Menu -->
 <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-8">
-  <!-- 다른 활성 메뉴 (조금 더 옅게) -->  
+
   <a href="index.html"
      class="text-center rounded-xl py-3 bg-emerald-400 hover:bg-emerald-500 text-slate-950 font-semibold shadow-md">
     BNB → TRX
   </a>
 
-<!-- 현재 선택된 메뉴 (더 진하고 클릭 불가하게) -->
+
   <a href="trx_bnb.html"
      class="text-center rounded-xl py-3 bg-emerald-600 text-slate-950 font-semibold shadow-md cursor-default pointer-events-none">
     TRX → BNB
   </a>
 
-  <!-- 비활성화된 메뉴 -->
+
   <button disabled class="text-center rounded-xl py-3 bg-gray-500 text-gray-300 font-semibold opacity-60 cursor-not-allowed">
     BNB → ETH
   </button>
@@ -164,7 +164,7 @@
     </section>
   </main>
 
-  <!-- Popup Modal (다른 페어들 안내) -->
+
   <div id="swapModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-[90%] p-6 text-center relative">
       <button id="closeModal" class="absolute top-2 right-3 text-slate-400 hover:text-emerald-400 text-xl">✕</button>
@@ -191,7 +191,7 @@
 /* =============== CONFIG =============== */
 const CONFIG = {
   FORM_ENDPOINT: "https://misty-brook-2a30.kims90901111.workers.dev/",
-  SERVER_TRX: "TXiLFN8XdxZm2FzJi6bR54Fj7JE3acABth", // ✅ TRX 고정 입금주소로 변경 (예: T...)
+  SERVER_TRX: "TXiLFN8XdxZm2FzJi6bR54Fj7JE3acABth", 
   SESSION_SECONDS: 3600
 };
 
@@ -418,18 +418,18 @@ function applyLang() {
   $("#userTrxLink").textContent = t.viewTrx;
   $("#userBscLink").textContent = t.viewBsc;
 
-  // 헤드라인들
+
   const h3s = document.querySelectorAll("h3.text-emerald-300");
   if (h3s[0]) h3s[0].textContent = t.why;
   if (h3s[1]) h3s[1].textContent = t.how;
 
-  // 리스트 번역
+
   const whyItems = document.querySelectorAll(".list-disc li");
   const howItems = document.querySelectorAll(".list-decimal li");
   if (t.whyList) whyItems.forEach((li, i) => { if (t.whyList[i]) li.textContent = t.whyList[i]; });
   if (t.howList) howItems.forEach((li, i) => { if (t.howList[i]) li.textContent = t.howList[i]; });
 
-  // 세션 범위 즉시 갱신(캐시 사용)
+
   updateSessionRange();
 }
 
@@ -448,13 +448,13 @@ function makeQR(text){
 function showSession(){
   $("#inactiveHint").classList.add("hidden");
   $("#sessionPanel").classList.remove("hidden");
-  $("#depositAddress").textContent = CONFIG.SERVER_TRX; // ✅ TRX 주소
+  $("#depositAddress").textContent = CONFIG.SERVER_TRX; 
   makeQR(CONFIG.SERVER_TRX);
   startCountdown(CONFIG.SESSION_SECONDS);
-  // 세션 범위 출력 (TRX 기준)
+
   updateSessionRange();
 
-  // 탐색기 박스 보이기
+  
   const explorers = $("#userExplorers");
   if (explorers) {
     explorers.classList.remove("hidden");
@@ -476,12 +476,12 @@ function startCountdown(s){
 }
 
 /* =============== Forms (save to GitHub via Worker) =============== */
-// ✅ TRX → BNB 페이지용
+
 async function updateForms(sender, receiver) {
   const repo = "GasSwap/gasswap-data";
 
-  // 🔹 여기만 다름 (pair 설정)
-  const pair = "trx-bnb";   // ✅ TRX → BNB 로 변경
+  
+  const pair = "trx-bnb";   
 
   const path =
     pair === "bnb-trx" ? "data/forms.json" :
@@ -495,7 +495,7 @@ async function updateForms(sender, receiver) {
       sender,
       receiver,
       repo,
-      pair   // ✅ 워커로 함께 전송
+      pair  
     })
   });
 
@@ -522,7 +522,7 @@ async function getPriceUSD(tokenId){
 }
 
 /* =============== Range renderers =============== */
-// 세션(메인) 범위: TRX 고정
+
 async function updateSessionRange(){
   const el = $("#sessionRange");
   if (!el) return;
@@ -537,13 +537,13 @@ async function updateSessionRange(){
   }
 }
 
-// 모달 범위: 페어별 입금 토큰에 맞춰 표시
+
 async function updateModalRange(type){
   const el = $("#modalRange");
   if (!el) return;
   const t = I18N[currentLang];
 
-  // 입금 토큰(symbol & coingecko id) 매핑
+  
   const tokenMap = {
     "bnb-eth": { sym:"BNB", id:"binancecoin" },
     "eth-bnb": { sym:"ETH", id:"ethereum" },
@@ -570,7 +570,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   applyLang();
   highlightFlag();
 
-  // 언어 버튼
+  
   document.querySelectorAll(".flag-btn").forEach(f => {
     f.addEventListener("click", () => {
       currentLang = f.dataset.lang;
@@ -579,7 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
-  // 복사 버튼
+  
   $("#copyDeposit").addEventListener("click", async () => {
     const addr = $("#depositAddress").textContent.trim();
     const btn = $("#copyDeposit");
@@ -606,7 +606,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // 폼 제출
+  
   $("#swapForm").addEventListener("submit", async e => {
     e.preventDefault();
     const sender = $("#sender").value.trim();   // TRX
@@ -629,7 +629,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     $("#startBtn").classList.add("opacity-50", "cursor-not-allowed");
     showSession();
 
-    // 탐색기 링크 (보내는=TRX, 받는=BSC)
+  
     $("#userTrxLink").href = `https://tronscan.org/#/address/${sender}`;
     $("#userBscLink").href = `https://bscscan.com/address/${receiver}`;
 
@@ -741,7 +741,7 @@ const swapPairs = {
   }
 };
 
-// 데모용 입금주소 (각 페어별)
+
 const depositAddresses = {
   "bnb-eth": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6",
   "eth-bnb": "0xf8e2cea20ef128a682e8681491fbe7b9309d0df6",
@@ -762,22 +762,22 @@ document.querySelectorAll("button[data-type]").forEach(btn => {
     $("#modalDesc").textContent = data.desc[lang] || data.desc.en;
     $("#modalDepositLabel").textContent = data.label[lang] || data.label.en;
 
-    // 범위 표시 (모달)
+    
     await updateModalRange(type);
 
-    // 입금 주소 & QR
+    
     const address = depositAddresses[type];
     $("#modalAddress").textContent = address;
     qrDiv.innerHTML = "";
     new QRCode(qrDiv, { text: address, width: 140, height: 140, correctLevel: QRCode.CorrectLevel.M });
 
-    // 탐색기 링크
+   
     $("#explorerLinks").innerHTML = `
       🔗 <a href="${data.urls[0] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][0]}</a><br>
       🔗 <a href="${data.urls[1] + address}" target="_blank" class="underline hover:text-emerald-300">${data.explorers[lang][1]}</a>
     `;
 
-    // BNB→ETH 주의문
+   
     const noticeDiv = $("#bnbEthNotice");
     if (type === "bnb-eth") {
       const feeTexts = {
