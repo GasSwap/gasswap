@@ -8,7 +8,6 @@
 <link rel="icon" type="image/png" href="favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
   <style>
     a { word-break: break-all; }
     .disabled-link { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
@@ -181,19 +180,21 @@
   </div>
 </div>
 
-<footer class="text-center mt-10 mb-4 text-sm text-slate-400 flex justify-center items-center gap-2">
-  <span>© 2025 GasSwap | For inquiries</span>
-  <a href="mailto:admin@gasswap.trade" class="text-emerald-400">admin@gasswap.trade</a>
-  <a href="https://x.com/gasswaptrade" target="_blank" class="flex items-center gap-1 text-slate-300 hover:text-white transition">
-    <i data-lucide="twitter" class="w-4 h-4"></i>
-    <span>@gasswaptrade</span>
+<footer class="mt-10 py-10 text-center text-xs text-slate-500 flex justify-center items-center gap-2">
+  © <span id="year"></span> GasSwap · 
+  <a href="mailto:admin@gasswap.trade" class="underline hover:text-emerald-400">
+    For inquiries
+  </a>
+  <a href="https://x.com/gasswaptrade" target="_blank" class="ml-2 hover:text-white transition">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" class="w-4 h-4 fill-current inline">
+      <path d="M714.163 519.284L1160.89 0H1056.37L667.137 450.887L357.328 0H0L468.492 
+      681.821L0 1226.37H104.521L515.518 747.228L842.672 1226.37H1200L714.137 
+      519.284H714.163ZM571.5 682.169L521.239 610.857L142.233 
+      79.675H306.203L606.947 505.816L657.208 577.128L1057.97 
+      1146.69H894L571.5 682.169Z"/>
+    </svg>
   </a>
 </footer>
-
-<script>
-  lucide.createIcons();
-</script>
-
 
   <script>
 const CONFIG = {
