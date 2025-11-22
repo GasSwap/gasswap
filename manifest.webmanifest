@@ -1,0 +1,22 @@
+{
+  "name": "GasSwap – Cross-Chain Swap",
+  "short_name": "GasSwap",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
+  "description": "Simple cross-chain swap: just send and receive. No wallet connection required.",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
